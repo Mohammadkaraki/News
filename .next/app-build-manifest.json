@@ -21,11 +21,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/article/[slug]/page.js"
     ],
-    "/terms-of-service/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/terms-of-service/page.js"
-    ],
     "/category/[slug]/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",

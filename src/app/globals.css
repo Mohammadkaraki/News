@@ -4,22 +4,22 @@
 
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900;
+    @apply bg-gray-50 text-gray-900 antialiased;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-bold;
+    @apply font-serif font-bold tracking-tight;
   }
   h1 {
-    @apply text-3xl md:text-4xl;
+    @apply text-3xl md:text-4xl lg:text-5xl;
   }
   h2 {
-    @apply text-2xl md:text-3xl;
+    @apply text-2xl md:text-3xl lg:text-4xl;
   }
   h3 {
-    @apply text-xl md:text-2xl;
+    @apply text-xl md:text-2xl lg:text-3xl;
   }
   a {
-    @apply text-primary hover:text-primary/80 transition-colors;
+    @apply text-primary hover:text-primary-700 transition-colors duration-200;
   }
 }
 
@@ -29,18 +29,62 @@
   }
   
   .card {
-    @apply bg-white rounded-lg shadow-md overflow-hidden transition-shadow hover:shadow-lg;
+    @apply bg-white rounded-xl shadow-soft overflow-hidden transition-all duration-300 hover:shadow-hover;
   }
   
   .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary;
+    @apply inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-lg font-medium text-white bg-primary hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary transition-colors duration-200;
   }
   
   .btn-secondary {
-    @apply bg-secondary hover:bg-secondary/90 focus:ring-secondary;
+    @apply bg-secondary hover:bg-secondary-700 focus:ring-secondary;
+  }
+  
+  .btn-outline {
+    @apply bg-transparent text-primary border-primary hover:bg-primary-50;
   }
   
   .category-badge {
-    @apply inline-block text-xs font-medium uppercase tracking-wider px-2 py-1 rounded;
+    @apply inline-block text-xs font-medium uppercase tracking-wider px-3 py-1 rounded-full;
+  }
+  
+  .section {
+    @apply py-12 md:py-16 lg:py-20;
+  }
+  
+  .section-title {
+    @apply text-2xl md:text-3xl font-serif font-bold mb-6 md:mb-8;
+  }
+  
+  .card-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8;
+  }
+  
+  .featured-grid {
+    @apply grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8;
+  }
+} 
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .line-clamp-3 {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .gradient-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0) 100%);
   }
 } 
