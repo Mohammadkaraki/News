@@ -1,0 +1,2 @@
+@echo off
+curl.exe -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MzI0MTJjYzk1NDk3ZWI4YjAyNjU2NyIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTI0MDQ1LCJleHAiOjE3NTA3MTYwNDV9.SGAc9oBPdo_arIolrThapJVSSx7Jdqnxf-w5NjPbIIc" http://localhost:5000/api/users/profile 
