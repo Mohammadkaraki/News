@@ -452,7 +452,15 @@ const clearData = async () => {
 // Seed users
 const seedUsers = async () => {
   try {
-    const createdUsers = await User.insertMany(users);
+    const createdUsers = [];
+    
+    // Create users one by one to ensure password hashing middleware runs
+    for (const userData of users) {
+      const user = new User(userData);
+      await user.save();
+      createdUsers.push(user);
+    }
+    
     console.log(`👥 Created ${createdUsers.length} users`);
     return createdUsers;
   } catch (error) {
