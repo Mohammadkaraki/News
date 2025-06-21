@@ -78,13 +78,13 @@ export default function HomePage() {
         let responseIndex = 0;
         if (businessSlug && categoryResponses[responseIndex]) {
           if (categoryResponses[responseIndex].success && categoryResponses[responseIndex].data) {
-            setBusinessArticles(categoryResponses[responseIndex].data.articles || []);
+            setBusinessArticles(categoryResponses[responseIndex].data?.articles || []);
           }
           responseIndex++;
         }
         if (sportsSlug && categoryResponses[responseIndex]) {
           if (categoryResponses[responseIndex].success && categoryResponses[responseIndex].data) {
-            setSportsArticles(categoryResponses[responseIndex].data.articles || []);
+            setSportsArticles(categoryResponses[responseIndex].data?.articles || []);
           }
         }
 
@@ -348,8 +348,11 @@ export default function HomePage() {
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <Link href={`/article/${article.slug}`} className="block h-full">
                     <Image
-                      src={article.image.url}
-                      alt={article.image.alt}
+                      {...getSafeImageProps(
+                        article.image?.url || '',
+                        article.image?.alt || article.title,
+                        article.category?.name
+                      )}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
@@ -457,8 +460,11 @@ export default function HomePage() {
                       <div className="flex-shrink-0">
                         <Link href={`/article/${article.slug}`} className="block relative w-20 h-20 rounded-lg overflow-hidden">
                           <Image
-                            src={article.image.url}
-                            alt={article.image.alt}
+                            {...getSafeImageProps(
+                              article.image?.url || '',
+                              article.image?.alt || article.title,
+                              article.category?.name
+                            )}
                             fill
                             className="object-cover group-hover:scale-110 transition-transform duration-300"
                           />
@@ -557,8 +563,11 @@ export default function HomePage() {
                 <div className="order-1 md:order-2 relative aspect-video">
                   <Link href={`/article/${article.slug}`} className="block h-full">
                     <Image
-                      src={article.image.url}
-                      alt={article.image.alt}
+                      {...getSafeImageProps(
+                        article.image?.url || '',
+                        article.image?.alt || article.title,
+                        article.category?.name
+                      )}
                       fill
                       className="object-cover rounded-lg"
                     />
@@ -590,8 +599,11 @@ export default function HomePage() {
             <div key={article.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               <Link href={`/article/${article.slug}`} className="block relative aspect-video">
                 <Image
-                  src={article.image.url}
-                  alt={article.image.alt}
+                  {...getSafeImageProps(
+                    article.image?.url || '',
+                    article.image?.alt || article.title,
+                    'business'
+                  )}
                   fill
                   className="object-cover"
                 />
@@ -642,8 +654,11 @@ export default function HomePage() {
             <div key={article.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               <Link href={`/article/${article.slug}`} className="block relative aspect-video">
                 <Image
-                  src={article.image.url}
-                  alt={article.image.alt}
+                  {...getSafeImageProps(
+                    article.image?.url || '',
+                    article.image?.alt || article.title,
+                    'sports'
+                  )}
                   fill
                   className="object-cover"
                 />

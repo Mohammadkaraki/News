@@ -5,7 +5,8 @@ const ALLOWED_DOMAINS = [
   'images.unsplash.com',
   'via.placeholder.com',
   'picsum.photos',
-  'source.unsplash.com'
+  'source.unsplash.com',
+  'localhost:5000'  // Allow backend server images
 ];
 
 /**
@@ -26,8 +27,8 @@ export function isValidImageUrl(url: string): boolean {
     try {
       const urlObj = new URL(url);
       
-      // Only allow https for external images
-      if (urlObj.protocol !== 'https:') {
+      // Only allow https for external images, but allow http for localhost
+      if (urlObj.protocol !== 'https:' && !urlObj.hostname.includes('localhost')) {
         return false;
       }
       
@@ -49,6 +50,10 @@ export function isValidImageUrl(url: string): boolean {
  */
 export function getSafeImageUrl(url: string, fallbackCategory?: string): string {
   if (isValidImageUrl(url)) {
+    // If it's a relative URL (starts with /), prepend the backend server URL
+    if (url.startsWith('/')) {
+      return `http://localhost:5000${url}`;
+    }
     return url;
   }
   

@@ -19,6 +19,11 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'source.unsplash.com',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '5000',
+      },
     ],
     // Add unoptimized for invalid/fallback images
     unoptimized: false,
