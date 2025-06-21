@@ -9,11 +9,14 @@ import ArticleCard from '@/components/ArticleCard';
 import SectionHeader from '@/components/SectionHeader';
 import CategoryBadge from '@/components/CategoryBadge';
 import { articleApi, categoryApi } from '@/lib/api';
+import { getSafeImageProps } from '@/lib/imageUtils';
 import type { Article, Category } from '@/types/api';
 
 export default function HomePage() {
   const [featuredArticles, setFeaturedArticles] = useState<Article[]>([]);
   const [latestArticles, setLatestArticles] = useState<Article[]>([]);
+  const [businessArticles, setBusinessArticles] = useState<Article[]>([]);
+  const [sportsArticles, setSportsArticles] = useState<Article[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,12 +27,44 @@ export default function HomePage() {
         setLoading(true);
         setError(null);
 
+        // Fetch categories first to get their slugs
+        const categoriesResponse = await categoryApi.getCategories();
+        let businessSlug = '';
+        let sportsSlug = '';
+        
+        if (categoriesResponse.success && categoriesResponse.data) {
+          setCategories(categoriesResponse.data.categories || []);
+          
+          // Find business and sports category slugs
+          const categories = categoriesResponse.data.categories || [];
+          const businessCategory = categories.find(
+            cat => cat.name.toLowerCase().includes('business') || cat.slug === 'business'
+          );
+          const sportsCategory = categories.find(
+            cat => cat.name.toLowerCase().includes('sport') || cat.slug === 'sports' || cat.slug === 'sport'
+          );
+          
+          businessSlug = businessCategory?.slug || '';
+          sportsSlug = sportsCategory?.slug || '';
+        }
+
         // Fetch all required data in parallel
-        const [featuredResponse, latestResponse, categoriesResponse] = await Promise.all([
+        const promises = [
           articleApi.getFeaturedArticles(),
           articleApi.getArticles({ limit: 8 }),
-          categoryApi.getCategories(),
-        ]);
+        ];
+
+        // Add category-specific requests if we found the categories
+        if (businessSlug) {
+          promises.push(articleApi.getArticles({ category: businessSlug, limit: 3 }));
+        }
+        if (sportsSlug) {
+          promises.push(articleApi.getArticles({ category: sportsSlug, limit: 4 }));
+        }
+
+        const responses = await Promise.all(promises);
+        
+        const [featuredResponse, latestResponse, ...categoryResponses] = responses;
 
         if (featuredResponse.success && featuredResponse.data) {
           setFeaturedArticles(featuredResponse.data.articles);
@@ -39,8 +74,18 @@ export default function HomePage() {
           setLatestArticles(latestResponse.data.articles);
         }
 
-        if (categoriesResponse.success && categoriesResponse.data) {
-          setCategories(categoriesResponse.data.categories);
+        // Set category-specific articles
+        let responseIndex = 0;
+        if (businessSlug && categoryResponses[responseIndex]) {
+          if (categoryResponses[responseIndex].success && categoryResponses[responseIndex].data) {
+            setBusinessArticles(categoryResponses[responseIndex].data.articles || []);
+          }
+          responseIndex++;
+        }
+        if (sportsSlug && categoryResponses[responseIndex]) {
+          if (categoryResponses[responseIndex].success && categoryResponses[responseIndex].data) {
+            setSportsArticles(categoryResponses[responseIndex].data.articles || []);
+          }
         }
 
         // Check if any critical data failed to load
@@ -110,8 +155,11 @@ export default function HomePage() {
               <div className="rounded-lg overflow-hidden shadow-md">
                 <Link href={`/article/${mainFeatured.slug}`} className="block relative aspect-video">
                   <Image
-                    src={mainFeatured.image.url}
-                    alt={mainFeatured.image.alt}
+                    {...getSafeImageProps(
+                      mainFeatured.image?.url || '',
+                      mainFeatured.image?.alt || mainFeatured.title,
+                      mainFeatured.category?.name
+                    )}
                     fill
                     className="object-cover"
                   />
@@ -130,12 +178,12 @@ export default function HomePage() {
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">
-                        {mainFeatured.author.initials}
+                        {mainFeatured.author?.initials || 'U'}
                       </div>
-                      <span className="text-sm text-gray-700">{mainFeatured.author.name}</span>
+                      <span className="text-sm text-gray-700">{mainFeatured.author?.name || 'Unknown'}</span>
                     </div>
                     <div className="text-xs text-gray-500">
-                      <span>{mainFeatured.readTime} min read • {mainFeatured.views} views</span>
+                      <span>{mainFeatured.readTime || 1} min read • {mainFeatured.views || 0} views</span>
                     </div>
                   </div>
                 </div>
@@ -148,8 +196,11 @@ export default function HomePage() {
                     <div className="w-1/3 relative aspect-square">
                       <Link href={`/article/${article.slug}`} className="block h-full">
                         <Image
-                          src={article.image.url}
-                          alt={article.image.alt}
+                          {...getSafeImageProps(
+                            article.image?.url || '',
+                            article.image?.alt || article.title,
+                            article.category?.name
+                          )}
                           fill
                           className="object-cover"
                         />
@@ -527,14 +578,15 @@ export default function HomePage() {
       </section>
 
       {/* Business Section */}
-      <section className="container mb-16">
-        <SectionHeader 
-          title="Business" 
-          viewAllLink="/category/business"
-        />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {latestArticles.slice(0, 3).map((article) => (
+      {businessArticles.length > 0 && (
+        <section className="container mb-16">
+          <SectionHeader 
+            title="Business" 
+            viewAllLink="/category/business"
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {businessArticles.map((article) => (
             <div key={article.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               <Link href={`/article/${article.slug}`} className="block relative aspect-video">
                 <Image
@@ -573,18 +625,20 @@ export default function HomePage() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Sport News Section */}
-      <section className="container mb-16">
-        <SectionHeader 
-          title="Sport News" 
-          viewAllLink="/category/sports"
-        />
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {latestArticles.slice(2, 6).map((article) => (
+      {sportsArticles.length > 0 && (
+        <section className="container mb-16">
+          <SectionHeader 
+            title="Sport News" 
+            viewAllLink="/category/sports"
+          />
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {sportsArticles.map((article) => (
             <div key={article.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               <Link href={`/article/${article.slug}`} className="block relative aspect-video">
                 <Image
@@ -623,8 +677,9 @@ export default function HomePage() {
               </div>
             </div>
           ))}
-        </div>
-      </section>
+          </div>
+        </section>
+      )}
 
       {/* Newsletter Subscription */}
       <section className="bg-gradient-to-r from-primary to-secondary py-12 mb-16">

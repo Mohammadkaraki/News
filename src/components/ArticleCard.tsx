@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { FiClock, FiBookmark, FiEye, FiHeart } from 'react-icons/fi';
 import CategoryBadge from './CategoryBadge';
 import { articleApi } from '@/lib/api';
+import { getSafeImageProps } from '@/lib/imageUtils';
 import type { Article } from '@/types/api';
 
 interface ArticleCardProps {
@@ -51,8 +52,11 @@ export default function ArticleCard({
         <Link href={`/article/${article.slug}`} className="relative block aspect-video">
           <div className="absolute inset-0">
             <Image
-              src={article.image?.url || '/placeholder-image.svg'}
-              alt={article.image?.alt || article.title}
+              {...getSafeImageProps(
+                article.image?.url || '',
+                article.image?.alt || article.title,
+                article.category?.name
+              )}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
@@ -111,8 +115,11 @@ export default function ArticleCard({
       <Link href={`/article/${article.slug}`} className="relative block overflow-hidden">
         <div className="aspect-video relative overflow-hidden">
           <Image
-            src={article.image?.url || '/placeholder-image.svg'}
-            alt={article.image?.alt || article.title}
+            {...getSafeImageProps(
+              article.image?.url || '',
+              article.image?.alt || article.title,
+              article.category?.name
+            )}
             fill
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
