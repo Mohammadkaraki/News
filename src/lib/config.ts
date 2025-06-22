@@ -4,8 +4,8 @@ export const config = {
   apiUrl: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000',
   
   // App Settings
-  appName: process.env.NEXT_PUBLIC_APP_NAME || 'News Website',
-  appDescription: process.env.NEXT_PUBLIC_APP_DESCRIPTION || 'Modern news website with real-time content',
+  appName: process.env.NEXT_PUBLIC_APP_NAME || 'موقع الأخبار',
+  appDescription: process.env.NEXT_PUBLIC_APP_DESCRIPTION || 'موقع أخبار حديث مع محتوى في الوقت الفعلي',
   
   // Pagination
   defaultPageSize: 10,
@@ -32,9 +32,9 @@ export const config = {
   
   // SEO defaults
   seo: {
-    defaultTitle: 'News Website - Latest News and Updates',
-    defaultDescription: 'Stay updated with the latest news across technology, sports, politics, business, entertainment, and health.',
-    defaultKeywords: ['news', 'latest news', 'breaking news', 'technology', 'sports', 'politics'],
+    defaultTitle: 'موقع الأخبار - آخر الأخبار والتحديثات',
+    defaultDescription: 'ابق على اطلاع بآخر الأخبار في التكنولوجيا والرياضة والسياسة والأعمال والترفيه والصحة.',
+    defaultKeywords: ['أخبار', 'آخر الأخبار', 'أخبار عاجلة', 'تكنولوجيا', 'رياضة', 'سياسة'],
     twitterHandle: '@newswebsite',
     ogImage: '/og-image.jpg',
   },

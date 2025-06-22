@@ -84,13 +84,13 @@ export default function ArticlesPage() {
   };
 
   const getPageTitle = () => {
-    if (section === 'must-read') return 'Must Read Articles';
-    if (section === 'editors-pick') return "Editor's Pick";
+    if (section === 'must-read') return 'مقالات يجب قراءتها';
+    if (section === 'editors-pick') return "اختيار المحرر";
     if (selectedCategory) {
       const category = categories.find(c => c.slug === selectedCategory);
-      return `${category?.name} Articles`;
+      return `مقالات ${category?.name}`;
     }
-    return 'All Articles';
+    return 'جميع المقالات';
   };
 
   return (
@@ -101,9 +101,9 @@ export default function ArticlesPage() {
           {getPageTitle()}
         </h1>
         <p className="text-gray-600">
-          {section === 'must-read' && 'Essential reading from our editorial team'}
-          {section === 'editors-pick' && "Hand-picked stories by our editors"}
-          {!section && `Discover ${totalArticles} articles across all categories`}
+          {section === 'must-read' && 'قراءة أساسية من فريقنا التحريري'}
+          {section === 'editors-pick' && "قصص مختارة بعناية من محررينا"}
+          {!section && `اكتشف ${totalArticles} مقالاً عبر جميع الفئات`}
         </p>
       </div>
 
@@ -118,7 +118,7 @@ export default function ArticlesPage() {
                 : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
             }`}
           >
-            All Categories
+            جميع الفئات
           </button>
           {categories.map((category) => (
             <button
@@ -170,11 +170,11 @@ export default function ArticlesPage() {
       ) : (
         <div className="text-center py-12">
           <div className="text-gray-400 text-6xl mb-4">📰</div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">No articles found</h3>
+          <h3 className="text-xl font-semibold text-gray-900 mb-2">لم يتم العثور على مقالات</h3>
           <p className="text-gray-600">
             {selectedCategory 
-              ? `No articles found in the ${categories.find(c => c.slug === selectedCategory)?.name} category.`
-              : 'No articles available at the moment.'
+              ? `لم يتم العثور على مقالات في فئة ${categories.find(c => c.slug === selectedCategory)?.name}.`
+              : 'لا توجد مقالات متاحة في الوقت الحالي.'
             }
           </p>
         </div>

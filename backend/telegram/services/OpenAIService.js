@@ -11,18 +11,18 @@ class OpenAIService {
             this.enabled = false;
         } else {
             this.enabled = true;
-            console.log('🤖 OpenAI service initialized');
+            console.log('🤖 تم تهيئة خدمة OpenAI');
         }
     }
 
     async enhanceArticleContent(originalCaption, category = 'sports') {
         if (!this.enabled) {
-            console.log('⚠️  OpenAI disabled, using original content');
+            console.log('⚠️  OpenAI معطل، استخدام المحتوى الأصلي');
             return this.createFallbackContent(originalCaption);
         }
 
         try {
-            console.log('🤖 Enhancing content with ChatGPT...');
+            console.log('🤖 تحسين المحتوى باستخدام ChatGPT...');
             
             const prompt = this.createPrompt(originalCaption, category);
             
@@ -31,7 +31,7 @@ class OpenAIService {
                 messages: [
                     {
                         role: "system",
-                        content: "You are a professional sports journalist with 10+ years of experience. You create comprehensive, engaging news articles from brief social media posts. Your articles are well-researched, include context, and follow professional journalism standards."
+                        content: "أنت صحفي رياضي محترف لديك خبرة أكثر من 10 سنوات. تقوم بإنشاء مقالات إخبارية شاملة وجذابة من منشورات وسائل التواصل الاجتماعي المختصرة. مقالاتك مدروسة جيداً وتتضمن السياق وتتبع معايير الصحافة المهنية. يجب أن تكتب باللغة العربية فقط وتستخدم أسلوب صحفي عربي احترافي."
                     },
                     {
                         role: "user",
@@ -46,42 +46,56 @@ class OpenAIService {
             return this.parseResponse(response, originalCaption);
 
         } catch (error) {
-            console.error('❌ Error with OpenAI:', error.message);
+            console.error('❌ خطأ في OpenAI:', error.message);
             return this.createFallbackContent(originalCaption);
         }
     }
 
     createPrompt(caption, category) {
+        const categoryArabic = this.getCategoryInArabic(category);
         return `
-Transform this ${category} social media post into a comprehensive professional news article:
+حول هذا المنشور من فئة ${categoryArabic} إلى مقال إخباري احترافي شامل:
 
-Original post: "${caption}"
+المنشور الأصلي: "${caption}"
 
-Requirements:
-1. Create a compelling, professional news headline (50-80 characters)
-2. Write a detailed article body (400-600 words) with multiple paragraphs
-3. Include background context and analysis
-4. Add quotes or expert commentary where appropriate
-5. Generate a professional author name
-6. Create relevant tags
+المتطلبات:
+1. إنشاء عنوان إخباري احترافي وجذاب (50-80 حرف)
+2. كتابة محتوى مقال مفصل (400-600 كلمة) مع عدة فقرات
+3. تضمين السياق والتحليل
+4. إضافة اقتباسات أو تعليقات خبراء عند الاقتضاء
+5. إنشاء اسم كاتب محترف عربي
+6. إنشاء علامات ذات صلة
 
-Format your response as JSON:
+اكتب ردك بتنسيق JSON:
 {
-  "title": "Professional News Headline Here",
-  "excerpt": "Brief engaging summary (150-200 characters)",
-  "content": "Detailed multi-paragraph article body with proper HTML formatting using <p> tags. Include context, analysis, and professional sports journalism style. Make it comprehensive and engaging.",
-  "authorName": "Professional Sports Journalist Name",
-  "tags": ["relevant", "sports", "tags"]
+  "title": "العنوان الإخباري الاحترافي هنا",
+  "excerpt": "ملخص موجز وجذاب (150-200 حرف)",
+  "content": "محتوى المقال المفصل متعدد الفقرات مع تنسيق HTML صحيح باستخدام علامات <p>. يتضمن السياق والتحليل وأسلوب الصحافة الرياضية المهنية. اجعله شاملاً وجذاباً.",
+  "authorName": "اسم الصحفي الرياضي المحترف",
+  "tags": ["علامات", "رياضية", "ذات_صلة"]
 }
 
-IMPORTANT: 
-- The content must be 400+ words with multiple paragraphs
-- Use proper HTML <p> tags for formatting
-- Make it sound like professional sports journalism
-- Add context and background information
-- Include analysis and implications
-- Make the title catchy and professional
+مهم جداً: 
+- يجب أن يكون المحتوى 400+ كلمة مع عدة فقرات
+- استخدم علامات HTML <p> للتنسيق
+- اجعله يبدو كصحافة رياضية احترافية
+- أضف السياق والمعلومات الخلفية
+- تضمين التحليل والتداعيات
+- اجعل العنوان جذاباً واحترافياً
+- اكتب باللغة العربية فقط
         `.trim();
+    }
+
+    getCategoryInArabic(category) {
+        const categoryMap = {
+            'sports': 'رياضة',
+            'business': 'أعمال',
+            'technology': 'تكنولوجيا',
+            'politics': 'سياسة',
+            'entertainment': 'ترفيه',
+            'health': 'صحة'
+        };
+        return categoryMap[category.toLowerCase()] || 'أخبار عامة';
     }
 
     parseResponse(response, originalCaption) {
@@ -97,7 +111,7 @@ IMPORTANT:
                 tags: this.validateTags(parsed.tags) || this.extractHashtags(originalCaption)
             };
         } catch (error) {
-            console.warn('⚠️  Failed to parse OpenAI response, using fallback');
+            console.warn('⚠️  فشل في تحليل استجابة OpenAI، استخدام المحتوى الاحتياطي');
             return this.createFallbackContent(originalCaption);
         }
     }
@@ -125,34 +139,34 @@ IMPORTANT:
     }
 
     createExpandedContent(caption) {
-        // Create a more detailed version of the original caption
+        // Create a more detailed version of the original caption in Arabic
         const paragraphs = caption.split('\n').filter(p => p.trim());
         
         if (paragraphs.length === 1) {
-            // Single paragraph - expand it significantly
+            // Single paragraph - expand it significantly in Arabic
             return `
 <p>${caption}</p>
 
-<p>This significant development in the sports world has captured the attention of fans, analysts, and sports enthusiasts worldwide. The event represents a crucial moment in the ongoing season, with implications that extend beyond the immediate match result.</p>
+<p>هذا التطور المهم في عالم الرياضة قد جذب انتباه المشجعين والمحللين وعشاق الرياضة في جميع أنحاء العالم. يمثل هذا الحدث لحظة حاسمة في الموسم الجاري، مع تداعيات تمتد إلى ما هو أبعد من نتيجة المباراة المباشرة.</p>
 
-<p>Sports experts have been closely monitoring this situation, noting the various factors that contributed to this outcome. The performance showcased today demonstrates the high level of competition and skill that defines modern professional sports.</p>
+<p>يراقب الخبراء الرياضيون هذا الوضع عن كثب، مع ملاحظة العوامل المختلفة التي ساهمت في هذه النتيجة. الأداء المعروض اليوم يظهر المستوى العالي من المنافسة والمهارة التي تميز الرياضة المهنية الحديثة.</p>
 
-<p>The impact of this development is expected to resonate throughout the sporting community, influencing upcoming matches and strategic decisions. Fans have taken to social media to express their reactions, with many praising the exceptional display of athleticism and sportsmanship.</p>
+<p>من المتوقع أن يكون لتأثير هذا التطور صدى في جميع أنحاء المجتمع الرياضي، مما يؤثر على المباريات القادمة والقرارات الاستراتيجية. لجأ المشجعون إلى وسائل التواصل الاجتماعي للتعبير عن ردود أفعالهم، حيث أشاد كثيرون بالعرض الاستثنائي للقدرة الرياضية والروح الرياضية.</p>
 
-<p>As the season progresses, this moment will likely be remembered as a pivotal point that shaped the trajectory of the teams involved. Sports analysts continue to provide detailed commentary on the technical aspects and broader implications of today's events.</p>
+<p>مع تقدم الموسم، من المحتمل أن تُذكر هذه اللحظة كنقطة محورية شكلت مسار الفرق المشاركة. يواصل المحللون الرياضيون تقديم تعليقات مفصلة حول الجوانب التقنية والتداعيات الأوسع لأحداث اليوم.</p>
 
-<p>Stay tuned for continued coverage as we monitor further developments and provide comprehensive analysis of this evolving sports story.</p>
+<p>ابقوا معنا للمتابعة المستمرة بينما نراقب التطورات الإضافية ونقدم تحليلاً شاملاً لهذه القصة الرياضية المتطورة.</p>
             `.trim();
         } else {
-            // Multiple paragraphs - format them properly and add context
+            // Multiple paragraphs - format them properly and add context in Arabic
             const formattedParagraphs = paragraphs.map(p => `<p>${p.trim()}</p>`).join('\n\n');
-            return `${formattedParagraphs}\n\n<p>This development continues to attract significant attention from the sports community, with ongoing analysis and commentary from experts in the field.</p>`;
+            return `${formattedParagraphs}\n\n<p>يستمر هذا التطور في جذب اهتمام كبير من المجتمع الرياضي، مع التحليل والتعليق المستمر من الخبراء في هذا المجال.</p>`;
         }
     }
 
     generateAuthorName() {
-        const firstNames = ['Alex', 'Jordan', 'Taylor', 'Casey', 'Morgan', 'Riley', 'Avery', 'Quinn'];
-        const lastNames = ['Johnson', 'Williams', 'Brown', 'Davis', 'Miller', 'Wilson', 'Moore', 'Taylor'];
+        const firstNames = ['أحمد', 'محمد', 'عبدالله', 'خالد', 'سعد', 'فيصل', 'عمر', 'علي', 'يوسف', 'حسام'];
+        const lastNames = ['العتيبي', 'المطيري', 'الشمري', 'القحطاني', 'الغامدي', 'العنزي', 'الدوسري', 'الحربي', 'الزهراني', 'السعيد'];
         
         const firstName = firstNames[Math.floor(Math.random() * firstNames.length)];
         const lastName = lastNames[Math.floor(Math.random() * lastNames.length)];

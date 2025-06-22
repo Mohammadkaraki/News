@@ -213,12 +213,80 @@ class ArticleService {
             
             console.log(`📄 Article created with ID: ${savedArticle._id}`);
             
+            // Emit real-time update via WebSocket
+            this.emitNewArticle(savedArticle, category, author);
+            
             return savedArticle;
 
         } catch (error) {
             console.error('Error creating article via DB:', error);
             throw error;
         }
+    }
+
+    emitNewArticle(article, category, author) {
+        try {
+            // Use HTTP API to notify the WebSocket server
+            const articleData = {
+                id: article._id,
+                title: article.title,
+                excerpt: article.excerpt,
+                slug: article.slug,
+                image: article.image,
+                category: {
+                    id: category._id,
+                    name: category.name,
+                    slug: category.slug
+                },
+                author: {
+                    id: author._id,
+                    name: author.name
+                },
+                publishedAt: article.publishedAt,
+                timeAgo: this.getTimeAgo(article.publishedAt),
+                readTime: Math.max(1, Math.ceil(article.content.replace(/<[^>]*>/g, '').split(' ').length / 200)),
+                views: 0,
+                tags: article.tags,
+                source: 'telegram'
+            };
+
+            // Send HTTP request to WebSocket endpoint
+            this.notifyWebSocket(articleData);
+
+        } catch (error) {
+            console.error('❌ Error emitting WebSocket event:', error.message);
+        }
+    }
+
+    async notifyWebSocket(articleData) {
+        try {
+            const axios = require('axios');
+            
+            await axios.post('http://localhost:5000/api/websocket/notify', {
+                type: 'NEW_ARTICLE',
+                article: articleData,
+                timestamp: new Date().toISOString()
+            }, {
+                timeout: 3000,
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            console.log(`🔔 Real-time update sent for article: "${articleData.title}"`);
+        } catch (error) {
+            console.warn('⚠️  WebSocket notification failed:', error.message);
+        }
+    }
+
+    getTimeAgo(date) {
+        const now = new Date();
+        const diffInSeconds = Math.floor((now - new Date(date)) / 1000);
+        
+        if (diffInSeconds < 60) return 'الآن';
+        if (diffInSeconds < 3600) return `منذ ${Math.floor(diffInSeconds / 60)} دقيقة`;
+        if (diffInSeconds < 86400) return `منذ ${Math.floor(diffInSeconds / 3600)} ساعة`;
+        return `منذ ${Math.floor(diffInSeconds / 86400)} يوم`;
     }
 
     async createArticleAPI(articleData) {

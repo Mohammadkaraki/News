@@ -4,6 +4,8 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
+const { createServer } = require('http');
+const { Server } = require('socket.io');
 require('dotenv').config();
 
 // Import database connection
@@ -22,6 +24,35 @@ connectDB();
 
 // Initialize Express app
 const app = express();
+const server = createServer(app);
+
+// Initialize Socket.IO with CORS configuration
+const io = new Server(server, {
+  cors: {
+    origin: [
+      process.env.FRONTEND_URL || 'http://localhost:3000',
+      'http://localhost:3000',
+      'http://localhost:3001'
+    ],
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+});
+
+// Make io available globally for other modules
+global.io = io;
+
+// Socket.IO connection handling
+io.on('connection', (socket) => {
+  console.log('🔌 Client connected:', socket.id);
+  
+  // Join a room for news updates
+  socket.join('news-updates');
+  
+  socket.on('disconnect', () => {
+    console.log('🔌 Client disconnected:', socket.id);
+  });
+});
 
 // Security middleware
 app.use(helmet());
@@ -80,8 +111,44 @@ app.get('/health', (req, res) => {
     success: true,
     message: 'Server is running!',
     environment: process.env.NODE_ENV,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
+    websocket: 'enabled'
   });
+});
+
+// WebSocket notification endpoint
+app.post('/api/websocket/notify', (req, res) => {
+  try {
+    const { type, article, timestamp } = req.body;
+    
+    if (type === 'NEW_ARTICLE' && article) {
+      // Emit to all connected clients in the news-updates room
+      io.to('news-updates').emit('newArticle', {
+        type,
+        article,
+        timestamp
+      });
+      
+      console.log(`🔔 WebSocket notification sent for: "${article.title}"`);
+      
+      res.json({
+        success: true,
+        message: 'WebSocket notification sent',
+        clients: io.engine.clientsCount
+      });
+    } else {
+      res.status(400).json({
+        success: false,
+        message: 'Invalid notification data'
+      });
+    }
+  } catch (error) {
+    console.error('❌ WebSocket notification error:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'WebSocket notification failed'
+    });
+  }
 });
 
 // API Routes
@@ -99,7 +166,8 @@ app.get('/', (req, res) => {
       categories: '/api/categories',
       users: '/api/users',
       health: '/health'
-    }
+    },
+    features: ['WebSocket Support', 'Real-time Updates']
   });
 });
 
@@ -117,7 +185,7 @@ app.use(errorHandler);
 // Start server
 const PORT = process.env.PORT || 5000;
 
-const server = app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`🚀 Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
   console.log(`📱 Health check: http://localhost:${PORT}/health`);
   console.log(`📚 API Base URL: http://localhost:${PORT}/api`);

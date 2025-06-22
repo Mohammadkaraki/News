@@ -1,15 +1,16 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiChevronRight, FiLoader } from 'react-icons/fi';
+import { FiChevronRight, FiLoader, FiWifi, FiWifiOff } from 'react-icons/fi';
 
 import ArticleCard from '@/components/ArticleCard';
 import SectionHeader from '@/components/SectionHeader';
 import CategoryBadge from '@/components/CategoryBadge';
 import { articleApi, categoryApi } from '@/lib/api';
 import { getSafeImageProps, getSafeAuthorInfo } from '@/lib/imageUtils';
+import { useRealTimeUpdates } from '@/hooks/useRealTimeUpdates';
 import type { Article, Category } from '@/types/api';
 
 export default function HomePage() {
@@ -20,6 +21,44 @@ export default function HomePage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [newArticleNotification, setNewArticleNotification] = useState<Article | null>(null);
+
+  // Handle new article from real-time updates
+  const handleNewArticle = useCallback((newArticle: Article) => {
+    console.log('🆕 New article received via WebSocket:', newArticle.title);
+    
+    // Show notification
+    setNewArticleNotification(newArticle);
+    
+    // Auto-hide notification after 5 seconds
+    setTimeout(() => {
+      setNewArticleNotification(null);
+    }, 5000);
+    
+    // Add to latest articles (at the beginning)
+    setLatestArticles(prev => [newArticle, ...prev.slice(0, 7)]);
+    
+    // If it's a featured article, add to featured
+    if (newArticle.featured) {
+      setFeaturedArticles(prev => [newArticle, ...prev.slice(0, 3)]);
+    }
+    
+    // Add to category-specific arrays
+    if (newArticle.category.slug === 'business') {
+      setBusinessArticles(prev => [newArticle, ...prev.slice(0, 2)]);
+    } else if (newArticle.category.slug === 'sports' || newArticle.category.slug === 'sport') {
+      setSportsArticles(prev => [newArticle, ...prev.slice(0, 3)]);
+    }
+  }, []);
+
+  // Initialize real-time updates
+  const { isConnected } = useRealTimeUpdates({
+    onNewArticle: handleNewArticle,
+    onError: (error) => {
+      console.error('WebSocket error:', error);
+    },
+    enabled: true
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -135,17 +174,150 @@ export default function HomePage() {
 
   return (
     <div className="pb-16">
-      {/* Hero Section */}
-      <section className="bg-gray-50 py-12 mb-12">
-        <div className="container">
-          <div className="text-center max-w-3xl mx-auto mb-10">
-            <h2 className="text-gray-800 uppercase tracking-wider text-sm font-semibold mb-4">
-              Welcome to News Website
-            </h2>
-            <h1 className="text-3xl md:text-4xl font-serif font-bold mb-4">
-              Craft narratives ✍️ that ignite <span className="text-primary">inspiration</span> 🌟,{' '}
-              <span className="text-primary">knowledge</span> 📚, and <span className="text-primary">entertainment</span> 🎬
+      {/* Real-time Connection Status */}
+      <div className="fixed top-4 left-4 z-50">
+        <div className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
+          isConnected 
+            ? 'bg-green-100 text-green-800 border border-green-200' 
+            : 'bg-red-100 text-red-800 border border-red-200'
+        }`}>
+          {isConnected ? <FiWifi className="w-4 h-4" /> : <FiWifiOff className="w-4 h-4" />}
+          {isConnected ? 'متصل' : 'غير متصل'}
+        </div>
+      </div>
+
+      {/* New Article Notification */}
+      {newArticleNotification && (
+        <div className="fixed top-4 right-4 z-50 max-w-sm">
+          <div className="bg-white border border-primary/20 rounded-lg shadow-lg p-4 animate-slide-in-right">
+            <div className="flex items-start gap-3">
+              <div className="w-2 h-2 bg-primary rounded-full mt-2 animate-pulse"></div>
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <span className="text-primary font-semibold text-sm">مقال جديد</span>
+                  <CategoryBadge category={newArticleNotification.category} size="sm" />
+                </div>
+                <Link 
+                  href={`/article/${newArticleNotification.slug}`}
+                  className="block"
+                  onClick={() => setNewArticleNotification(null)}
+                >
+                  <h4 className="font-semibold text-gray-900 text-sm line-clamp-2 hover:text-primary transition-colors">
+                    {newArticleNotification.title}
+                  </h4>
+                  <p className="text-gray-600 text-xs mt-1 line-clamp-1">
+                    {newArticleNotification.excerpt}
+                  </p>
+                </Link>
+                <button
+                  onClick={() => setNewArticleNotification(null)}
+                  className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label="إغلاق الإشعار"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Enhanced Hero Section */}
+      <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
+        {/* Background Pattern */}
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0" style={{
+            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), 
+                             radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.3) 0%, transparent 50%)`
+          }}></div>
+        </div>
+        
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        </div>
+        
+        <div className="relative container py-12 md:py-16">
+          <div className="text-center max-w-4xl mx-auto mb-8">
+            {/* Welcome Badge */}
+            <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-6 border border-white/20">
+              <span className="ml-2">🌟</span>
+              مرحباً بكم في موقع الأخبار
+              <span className="mr-2">📰</span>
+            </div>
+            
+            {/* Main Headline */}
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
+              <span className="block mb-2">اصنع قصصاً</span>
+              <span className="block mb-2">
+                تشعل <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">الإلهام</span>
+              </span>
+              <span className="block text-2xl md:text-3xl lg:text-4xl text-gray-300">
+                المعرفة والترفيه
+              </span>
             </h1>
+            
+            {/* Subtitle */}
+            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+              اكتشف أحدث الأخبار والقصص المثيرة من حول العالم في مكان واحد
+            </p>
+            
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
+              <Link 
+                href="/articles"
+                className="group px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full font-semibold hover:shadow-2xl hover:shadow-primary/25 transition-all duration-300 transform hover:scale-105"
+              >
+                <span className="flex items-center">
+                  استكشف الأخبار
+                  <FiChevronRight className="mr-2 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </Link>
+              <Link 
+                href="/categories"
+                className="px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-full font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300"
+              >
+                تصفح التصنيفات
+              </Link>
+            </div>
+            
+            {/* Stats */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-xl mx-auto">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-primary mb-1">500+</div>
+                <div className="text-gray-400 text-xs">مقال يومياً</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-primary mb-1">50K+</div>
+                <div className="text-gray-400 text-xs">قارئ نشط</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-primary mb-1">24/7</div>
+                <div className="text-gray-400 text-xs">تغطية مباشرة</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-primary mb-1">6</div>
+                <div className="text-gray-400 text-xs">تصنيف رئيسي</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Bottom Wave */}
+        <div className="absolute bottom-0 left-0 right-0">
+          <svg viewBox="0 0 1200 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-12 md:h-20">
+            <path d="M0,60 C300,120 900,0 1200,60 L1200,120 L0,120 Z" fill="rgb(249, 250, 251)" />
+          </svg>
+        </div>
+      </section>
+      
+      {/* Featured Articles Section */}
+      <section className="bg-gray-50 py-16 -mt-1">
+        <div className="container">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">الأخبار المميزة</h2>
+            <p className="text-xl text-gray-600">أهم القصص والأحداث التي تشكل عالمنا اليوم</p>
           </div>
           
           {/* Featured Articles */}

@@ -87,7 +87,7 @@ export default function SearchBar({ onClose }: SearchBarProps) {
     <div className="relative">
       <form onSubmit={handleSubmit} className="relative">
         <div className="flex items-center border-2 border-gray-200 rounded-xl overflow-hidden focus-within:border-primary transition-all duration-200 bg-white shadow-soft">
-          <div className="pl-4 text-gray-400">
+          <div className="pr-4 text-gray-400">
             <FiSearch className="w-5 h-5" />
           </div>
           <input
@@ -97,14 +97,14 @@ export default function SearchBar({ onClose }: SearchBarProps) {
             onChange={(e) => handleQueryChange(e.target.value)}
             onFocus={() => setIsFocused(true)}
             onBlur={() => setTimeout(() => setIsFocused(false), 200)}
-            placeholder="Search for news, topics, or keywords..."
-            className="w-full py-3 pl-2 pr-12 text-gray-700 focus:outline-none bg-transparent"
+            placeholder="ابحث في الأخبار والمواضيع والكلمات المفتاحية..."
+            className="w-full py-3 pr-2 pl-12 text-gray-700 focus:outline-none bg-transparent text-right"
           />
           <button
             type="submit"
             className="h-full px-5 py-3 bg-primary text-white font-medium hover:bg-primary-700 transition-colors duration-200"
           >
-            Search
+            بحث
           </button>
         </div>
       </form>
@@ -117,7 +117,7 @@ export default function SearchBar({ onClose }: SearchBarProps) {
               {isLoading && (
                 <div className="flex items-center justify-center py-4">
                   <FiLoader className="w-5 h-5 animate-spin text-primary mr-2" />
-                  <span className="text-sm text-gray-500">Searching...</span>
+                  <span className="text-sm text-gray-500">جاري البحث...</span>
                 </div>
               )}
 
@@ -125,7 +125,7 @@ export default function SearchBar({ onClose }: SearchBarProps) {
               {!isLoading && suggestions.length > 0 && (
                 <div>
                   <h4 className="text-xs font-medium text-gray-500 mb-3 flex items-center">
-                    <FiSearch className="mr-1 w-3 h-3" /> SUGGESTIONS
+                    <FiSearch className="ml-1 w-3 h-3" /> اقتراحات
                   </h4>
                   <ul className="space-y-1">
                     {suggestions.map((article) => (

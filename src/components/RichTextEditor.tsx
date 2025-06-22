@@ -42,23 +42,23 @@ export default function RichTextEditor({
   };
 
   const toolbar = [
-    { label: 'B', action: () => insertMarkdown('**', '**', 'bold text'), title: 'Bold' },
-    { label: 'I', action: () => insertMarkdown('*', '*', 'italic text'), title: 'Italic' },
-    { label: 'H1', action: () => insertMarkdown('# ', '', 'Heading 1'), title: 'Heading 1' },
-    { label: 'H2', action: () => insertMarkdown('## ', '', 'Heading 2'), title: 'Heading 2' },
-    { label: 'H3', action: () => insertMarkdown('### ', '', 'Heading 3'), title: 'Heading 3' },
-    { label: 'UL', action: () => insertMarkdown('\n- ', '', 'List item'), title: 'Bullet List' },
-    { label: 'OL', action: () => insertMarkdown('\n1. ', '', 'List item'), title: 'Numbered List' },
-    { label: 'Link', action: () => {
-      const url = prompt('Enter URL:') || '#';
-      insertMarkdown('[', `](${url})`, 'link text');
-    }, title: 'Insert Link' },
-    { label: 'Img', action: () => {
-      const url = prompt('Enter image URL:') || '';
-      insertMarkdown('![', `](${url})`, 'alt text');
-    }, title: 'Insert Image' },
-    { label: 'Code', action: () => insertMarkdown('`', '`', 'code'), title: 'Code' },
-    { label: 'Quote', action: () => insertMarkdown('> ', '', 'Quote text'), title: 'Quote' },
+    { label: 'ع', action: () => insertMarkdown('**', '**', 'نص عريض'), title: 'عريض' },
+    { label: 'م', action: () => insertMarkdown('*', '*', 'نص مائل'), title: 'مائل' },
+    { label: 'ع1', action: () => insertMarkdown('# ', '', 'عنوان 1'), title: 'عنوان 1' },
+    { label: 'ع2', action: () => insertMarkdown('## ', '', 'عنوان 2'), title: 'عنوان 2' },
+    { label: 'ع3', action: () => insertMarkdown('### ', '', 'عنوان 3'), title: 'عنوان 3' },
+    { label: '•', action: () => insertMarkdown('\n- ', '', 'عنصر القائمة'), title: 'قائمة نقطية' },
+    { label: '1.', action: () => insertMarkdown('\n1. ', '', 'عنصر القائمة'), title: 'قائمة مرقمة' },
+    { label: 'رابط', action: () => {
+      const url = prompt('أدخل الرابط:') || '#';
+      insertMarkdown('[', `](${url})`, 'نص الرابط');
+    }, title: 'إدراج رابط' },
+    { label: 'صورة', action: () => {
+      const url = prompt('أدخل رابط الصورة:') || '';
+      insertMarkdown('![', `](${url})`, 'النص البديل');
+    }, title: 'إدراج صورة' },
+    { label: 'كود', action: () => insertMarkdown('`', '`', 'كود'), title: 'كود' },
+    { label: '"', action: () => insertMarkdown('> ', '', 'نص الاقتباس'), title: 'اقتباس' },
   ];
 
   return (
@@ -94,21 +94,21 @@ export default function RichTextEditor({
         />
         
         {/* Character count */}
-        <div className="absolute bottom-2 right-2 text-xs text-gray-400 bg-white/80 px-2 py-1 rounded backdrop-blur-sm">
-          {value.length} characters
+        <div className="absolute bottom-2 left-2 text-xs text-gray-400 bg-white/80 px-2 py-1 rounded backdrop-blur-sm">
+          {value.length} أحرف
         </div>
       </div>
 
       {/* Help text */}
       <div className="bg-gray-50 border-t border-gray-200 px-4 py-2 text-xs text-gray-500">
         <div className="flex flex-wrap gap-4">
-          <span><strong>**bold**</strong></span>
-          <span><em>*italic*</em></span>
-          <span><code>`code`</code></span>
-          <span># Heading</span>
-          <span>[link](url)</span>
-          <span>![img](url)</span>
-          <span>&gt; quote</span>
+          <span><strong>**عريض**</strong></span>
+          <span><em>*مائل*</em></span>
+          <span><code>`كود`</code></span>
+          <span># عنوان</span>
+          <span>[رابط](url)</span>
+          <span>![صورة](url)</span>
+          <span>&gt; اقتباس</span>
         </div>
       </div>
     </div>

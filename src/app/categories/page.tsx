@@ -72,11 +72,11 @@ export default function CategoriesPage() {
       {/* Header */}
       <div className="mb-12 text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-          Browse Categories
+          تصفح الفئات
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          Explore our comprehensive collection of news categories. From technology to sports, 
-          find the topics that matter most to you.
+          استكشف مجموعتنا الشاملة من فئات الأخبار. من التكنولوجيا إلى الرياضة، 
+          اعثر على المواضيع التي تهمك أكثر.
         </p>
       </div>
 

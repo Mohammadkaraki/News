@@ -10,7 +10,7 @@ const Article = require('../models/Article');
 // Sample data
 const users = [
   {
-    name: 'Admin User',
+    name: 'مدير الموقع',
     email: 'admin@newswebsite.com',
     password: 'Admin123!',
     role: 'admin',
@@ -18,7 +18,7 @@ const users = [
     isActive: true
   },
   {
-    name: 'Editor User',
+    name: 'محرر الأخبار',
     email: 'editor@newswebsite.com',
     password: 'Editor123!',
     role: 'editor',
@@ -26,70 +26,70 @@ const users = [
     isActive: true
   },
   {
-    name: 'John Doe',
-    email: 'john@newswebsite.com',
+    name: 'أحمد محمد',
+    email: 'ahmed@newswebsite.com',
     password: 'User123!',
     role: 'user',
     isVerified: true,
     isActive: true,
-    bio: 'Technology enthusiast and writer'
+    bio: 'متحمس للتكنولوجيا وكاتب'
   },
   {
-    name: 'Jane Smith',
-    email: 'jane@newswebsite.com',
+    name: 'فاطمة علي',
+    email: 'fatima@newswebsite.com',
     password: 'User123!',
     role: 'user',
     isVerified: true,
     isActive: true,
-    bio: 'Sports journalist and blogger'
+    bio: 'صحفية رياضية ومدونة'
   }
 ];
 
 const categories = [
   {
-    name: 'Technology',
+    name: 'تكنولوجيا',
     slug: 'technology',
-    description: 'Latest tech news and innovations',
+    description: 'آخر أخبار التكنولوجيا والابتكارات',
     color: '#3B82F6',
     icon: 'laptop',
     sortOrder: 1
   },
   {
-    name: 'Sports',
+    name: 'رياضة',
     slug: 'sports',
-    description: 'Sports news and updates',
+    description: 'أخبار الرياضة والتحديثات',
     color: '#EF4444',
     icon: 'trophy',
     sortOrder: 2
   },
   {
-    name: 'Politics',
+    name: 'سياسة',
     slug: 'politics',
-    description: 'Political news and analysis',
+    description: 'الأخبار السياسية والتحليلات',
     color: '#8B5CF6',
     icon: 'building',
     sortOrder: 3
   },
   {
-    name: 'Business',
+    name: 'أعمال',
     slug: 'business',
-    description: 'Business and finance news',
+    description: 'أخبار الأعمال والمالية',
     color: '#10B981',
     icon: 'briefcase',
     sortOrder: 4
   },
   {
-    name: 'Entertainment',
+    name: 'ترفيه',
     slug: 'entertainment',
-    description: 'Entertainment and celebrity news',
+    description: 'أخبار الترفيه والمشاهير',
     color: '#F59E0B',
     icon: 'film',
     sortOrder: 5
   },
   {
-    name: 'Health',
+    name: 'صحة',
     slug: 'health',
-    description: 'Health and wellness news',
+    description: 'أخبار الصحة والعافية',
     color: '#06B6D4',
     icon: 'heart',
     sortOrder: 6
@@ -98,29 +98,29 @@ const categories = [
 
 const articles = [
   {
-    title: 'The Future of Artificial Intelligence in 2024',
-    slug: 'the-future-of-artificial-intelligence-in-2024',
-    excerpt: 'Exploring the latest developments in AI technology and what they mean for businesses and consumers alike.',
+    title: 'مستقبل الذكاء الاصطناعي في عام 2024',
+    slug: 'future-of-artificial-intelligence-2024',
+    excerpt: 'استكشاف أحدث التطورات في تكنولوجيا الذكاء الاصطناعي وما تعنيه للشركات والمستهلكين على حد سواء.',
     content: `
-      <p>Artificial Intelligence continues to evolve at an unprecedented pace, reshaping industries and transforming the way we work and live. As we move through 2024, several key trends are emerging that will define the future of AI.</p>
+      <p>يستمر الذكاء الاصطناعي في التطور بوتيرة لم يسبق لها مثيل، مما يعيد تشكيل الصناعات ويحول الطريقة التي نعمل ونعيش بها. مع تقدمنا في عام 2024، تظهر عدة اتجاهات رئيسية ستحدد مستقبل الذكاء الاصطناعي.</p>
       
-      <h2>Machine Learning Advances</h2>
-      <p>Recent breakthroughs in machine learning algorithms have enabled more sophisticated pattern recognition and predictive capabilities. These advances are particularly notable in natural language processing and computer vision.</p>
+      <h2>تطورات التعلم الآلي</h2>
+      <p>مكنت الاختراقات الأخيرة في خوارزميات التعلم الآلي من قدرات أكثر تطوراً في التعرف على الأنماط والتنبؤ. هذه التطورات ملحوظة بشكل خاص في معالجة اللغة الطبيعية ورؤية الكمبيوتر.</p>
       
-      <h2>Ethical AI Development</h2>
-      <p>The focus on responsible AI development has intensified, with organizations implementing robust frameworks for ethical AI deployment. This includes addressing bias, ensuring transparency, and maintaining human oversight.</p>
+      <h2>تطوير الذكاء الاصطناعي الأخلاقي</h2>
+      <p>تكثف التركيز على التطوير المسؤول للذكاء الاصطناعي، حيث تنفذ المنظمات أطر عمل قوية لنشر الذكاء الاصطناعي الأخلاقي. يشمل ذلك معالجة التحيز وضمان الشفافية والحفاظ على الإشراف البشري.</p>
       
-      <h2>Industry Applications</h2>
-      <p>From healthcare diagnostics to autonomous vehicles, AI applications are becoming more practical and accessible. The integration of AI into everyday business processes is accelerating digital transformation across sectors.</p>
+      <h2>التطبيقات الصناعية</h2>
+      <p>من التشخيص الطبي إلى المركبات ذاتية القيادة، تصبح تطبيقات الذكاء الاصطناعي أكثر عملية وإمكانية للوصول. إن دمج الذكاء الاصطناعي في العمليات التجارية اليومية يسرع التحول الرقمي عبر القطاعات.</p>
       
-      <h2>Looking Ahead</h2>
-      <p>As AI technology continues to mature, we can expect to see even more innovative applications that will further revolutionize how we interact with technology and each other.</p>
+      <h2>النظر إلى المستقبل</h2>
+      <p>مع استمرار نضج تكنولوجيا الذكاء الاصطناعي، يمكننا أن نتوقع رؤية المزيد من التطبيقات المبتكرة التي ستحدث ثورة أكبر في كيفية تفاعلنا مع التكنولوجيا ومع بعضنا البعض.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=400&fit=crop',
-      alt: 'Artificial Intelligence concept with futuristic brain illustration'
+      alt: 'مفهوم الذكاء الاصطناعي مع رسم توضيحي للدماغ المستقبلي'
     },
-    tags: ['artificial-intelligence', 'machine-learning', 'technology', 'future'],
+    tags: ['ذكاء-اصطناعي', 'تعلم-آلي', 'تكنولوجيا', 'مستقبل'],
     status: 'published',
     featured: true,
     publishedAt: new Date(),
@@ -128,26 +128,26 @@ const articles = [
     readTime: 5
   },
   {
-    title: 'Olympic Games 2024: Top Athletes to Watch',
-    slug: 'olympic-games-2024-top-athletes-to-watch',
-    excerpt: 'Meet the rising stars and returning champions who are set to make headlines at the upcoming Olympic Games.',
+    title: 'الألعاب الأولمبية 2024: أفضل الرياضيين الذين يجب مراقبتهم',
+    slug: 'olympic-games-2024-top-athletes',
+    excerpt: 'تعرف على النجوم الصاعدين والأبطال العائدين الذين سيصنعون عناوين الأخبار في الألعاب الأولمبية القادمة.',
     content: `
-      <p>The 2024 Olympic Games promise to showcase incredible athletic talent from around the world. Here are the top athletes who are expected to dominate their respective sports.</p>
+      <p>تعد الألعاب الأولمبية 2024 بعرض مواهب رياضية مذهلة من جميع أنحاء العالم. إليكم أفضل الرياضيين الذين من المتوقع أن يهيمنوا على رياضاتهم.</p>
       
-      <h2>Swimming Sensations</h2>
-      <p>Several young swimmers have been breaking records and are poised to make a significant impact at the Games. Their dedication and training regimens have been nothing short of extraordinary.</p>
+      <h2>نجوم السباحة</h2>
+      <p>كسر عدة سباحين شباب الأرقام القياسية وهم على استعداد لإحداث تأثير كبير في الألعاب. لقد كان تفانيهم وأنظمة تدريبهم استثنائية.</p>
       
-      <h2>Track and Field Stars</h2>
-      <p>The track and field events will feature some of the most competitive fields in Olympic history, with multiple world record holders competing for gold.</p>
+      <h2>نجوم ألعاب القوى</h2>
+      <p>ستشهد أحداث ألعاب القوى بعضاً من أكثر المنافسات تنافسية في تاريخ الألعاب الأولمبية، مع تنافس عدة حاملي أرقام قياسية عالمية على الذهب.</p>
       
-      <h2>Team Sports to Watch</h2>
-      <p>Basketball, volleyball, and soccer teams from various countries have been preparing intensively, promising exciting matches and potential upsets.</p>
+      <h2>الرياضات الجماعية التي يجب مراقبتها</h2>
+      <p>فرق كرة السلة والكرة الطائرة وكرة القدم من مختلف البلدان تستعد بكثافة، مما يعد بمباريات مثيرة ومفاجآت محتملة.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800&h=400&fit=crop',
-      alt: 'Olympic athletes competing in various sports'
+      alt: 'رياضيون أولمبيون يتنافسون في رياضات مختلفة'
     },
-    tags: ['olympics', 'sports', 'athletes', '2024'],
+    tags: ['أولمبياد', 'رياضة', 'رياضيون', '2024'],
     status: 'published',
     featured: true,
     publishedAt: new Date(Date.now() - 86400000),
@@ -155,26 +155,26 @@ const articles = [
     readTime: 4
   },
   {
-    title: 'Global Economic Outlook: Navigating Uncertain Times',
-    slug: 'global-economic-outlook-navigating-uncertain-times',
-    excerpt: 'Analysis of current economic trends and their potential impact on markets and consumers worldwide.',
+    title: 'النظرة الاقتصادية العالمية: التنقل في أوقات عدم اليقين',
+    slug: 'global-economic-outlook-uncertain-times',
+    excerpt: 'تحليل الاتجاهات الاقتصادية الحالية وتأثيرها المحتمل على الأسواق والمستهلكين في جميع أنحاء العالم.',
     content: `
-      <p>The global economy faces a complex landscape of challenges and opportunities. Understanding these dynamics is crucial for businesses and investors navigating the current climate.</p>
+      <p>يواجه الاقتصاد العالمي مشهداً معقداً من التحديات والفرص. إن فهم هذه الديناميكيات أمر بالغ الأهمية للشركات والمستثمرين الذين يتنقلون في المناخ الحالي.</p>
       
-      <h2>Market Volatility</h2>
-      <p>Recent market fluctuations have highlighted the interconnected nature of global economies and the rapid pace at which sentiment can shift.</p>
+      <h2>تقلبات السوق</h2>
+      <p>سلطت التقلبات الأخيرة في السوق الضوء على الطبيعة المترابطة للاقتصادات العالمية والوتيرة السريعة التي يمكن أن تتغير بها المشاعر.</p>
       
-      <h2>Inflation Trends</h2>
-      <p>Central banks worldwide are grappling with inflation management while trying to maintain economic growth momentum.</p>
+      <h2>اتجاهات التضخم</h2>
+      <p>تتصارع البنوك المركزية في جميع أنحاء العالم مع إدارة التضخم بينما تحاول الحفاظ على زخم النمو الاقتصادي.</p>
       
-      <h2>Emerging Markets</h2>
-      <p>Several emerging markets show promising signs of growth, offering new opportunities for international investment and trade partnerships.</p>
+      <h2>الأسواق الناشئة</h2>
+      <p>تُظهر عدة أسواق ناشئة علامات نمو واعدة، مما يوفر فرصاً جديدة للاستثمار الدولي والشراكات التجارية.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=800&h=400&fit=crop',
-      alt: 'Financial charts and graphs showing economic data'
+      alt: 'الرسوم البيانية والمخططات المالية التي تظهر البيانات الاقتصادية'
     },
-    tags: ['economy', 'business', 'markets', 'finance'],
+    tags: ['اقتصاد', 'أعمال', 'أسواق', 'مالية'],
     status: 'published',
     featured: false,
     publishedAt: new Date(Date.now() - 172800000),
@@ -182,26 +182,26 @@ const articles = [
     readTime: 6
   },
   {
-    title: 'Breakthrough in Renewable Energy Technology',
-    slug: 'breakthrough-in-renewable-energy-technology',
-    excerpt: 'Scientists announce a major advancement in solar panel efficiency that could revolutionize clean energy adoption.',
+    title: 'اختراق في تكنولوجيا الطاقة المتجددة',
+    slug: 'breakthrough-renewable-energy-technology',
+    excerpt: 'يعلن العلماء عن تقدم كبير في كفاءة الألواح الشمسية يمكن أن يحدث ثورة في اعتماد الطاقة النظيفة.',
     content: `
-      <p>A team of researchers has developed a new type of solar panel that achieves unprecedented efficiency rates, potentially transforming the renewable energy landscape.</p>
+      <p>طور فريق من الباحثين نوعاً جديداً من الألواح الشمسية يحقق معدلات كفاءة لم يسبق لها مثيل، مما قد يحول مشهد الطاقة المتجددة.</p>
       
-      <h2>Technical Innovation</h2>
-      <p>The breakthrough involves a novel approach to photovoltaic cell design that maximizes light absorption while minimizing energy loss.</p>
+      <h2>الابتكار التقني</h2>
+      <p>ينطوي الاختراق على نهج جديد في تصميم الخلايا الكهروضوئية يزيد من امتصاص الضوء مع تقليل فقدان الطاقة.</p>
       
-      <h2>Environmental Impact</h2>
-      <p>This advancement could significantly accelerate the transition to clean energy by making solar power more cost-effective and efficient.</p>
+      <h2>التأثير البيئي</h2>
+      <p>يمكن أن يؤدي هذا التقدم إلى تسريع الانتقال إلى الطاقة النظيفة بشكل كبير من خلال جعل الطاقة الشمسية أكثر فعالية من حيث التكلفة والكفاءة.</p>
       
-      <h2>Commercial Applications</h2>
-      <p>Industry experts predict that this technology could be commercially available within the next few years, pending further testing and refinement.</p>
+      <h2>التطبيقات التجارية</h2>
+      <p>يتوقع خبراء الصناعة أن تكون هذه التكنولوجيا متاحة تجارياً خلال السنوات القليلة القادمة، في انتظار المزيد من الاختبارات والتطوير.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1466611653911-95081537e5b7?w=800&h=400&fit=crop',
-      alt: 'Solar panels in a field with clear blue sky'
+      alt: 'ألواح شمسية في حقل مع سماء زرقاء صافية'
     },
-    tags: ['renewable-energy', 'solar-power', 'environment', 'technology'],
+    tags: ['طاقة-متجددة', 'طاقة-شمسية', 'بيئة', 'تكنولوجيا'],
     status: 'published',
     featured: false,
     publishedAt: new Date(Date.now() - 259200000),
@@ -209,26 +209,26 @@ const articles = [
     readTime: 4
   },
   {
-    title: 'Major Political Reform Announced by Government',
-    slug: 'major-political-reform-announced-by-government',
-    excerpt: 'New legislation aims to modernize voting systems and increase citizen participation in democratic processes.',
+    title: 'الحكومة تعلن عن إصلاح سياسي كبير',
+    slug: 'major-political-reform-announced',
+    excerpt: 'تهدف التشريعات الجديدة إلى تحديث أنظمة التصويت وزيادة مشاركة المواطنين في العمليات الديمقراطية.',
     content: `
-      <p>The government has announced comprehensive political reforms designed to enhance democratic participation and modernize electoral systems.</p>
+      <p>أعلنت الحكومة عن إصلاحات سياسية شاملة مصممة لتعزيز المشاركة الديمقراطية وتحديث الأنظمة الانتخابية.</p>
       
-      <h2>Digital Voting Initiatives</h2>
-      <p>The introduction of secure digital voting platforms aims to increase accessibility while maintaining election integrity.</p>
+      <h2>مبادرات التصويت الرقمي</h2>
+      <p>يهدف إدخال منصات التصويت الرقمي الآمنة إلى زيادة إمكانية الوصول مع الحفاظ على نزاهة الانتخابات.</p>
       
-      <h2>Citizen Engagement</h2>
-      <p>New programs will facilitate greater public involvement in policy-making processes through digital consultations and town halls.</p>
+      <h2>مشاركة المواطنين</h2>
+      <p>ستسهل البرامج الجديدة مشاركة أكبر للجمهور في عمليات صنع السياسات من خلال الاستشارات الرقمية وقاعات المدينة.</p>
       
-      <h2>Transparency Measures</h2>
-      <p>Enhanced reporting requirements will provide citizens with better visibility into government operations and decision-making processes.</p>
+      <h2>تدابير الشفافية</h2>
+      <p>ستوفر متطلبات الإبلاغ المحسنة للمواطنين رؤية أفضل لعمليات الحكومة وعمليات صنع القرار.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=800&h=400&fit=crop',
-      alt: 'Government building with democratic symbols'
+      alt: 'مبنى حكومي مع رموز ديمقراطية'
     },
-    tags: ['politics', 'democracy', 'reform', 'government'],
+    tags: ['سياسة', 'ديمقراطية', 'إصلاح', 'حكومة'],
     status: 'published',
     featured: false,
     publishedAt: new Date(Date.now() - 345600000),
@@ -236,26 +236,26 @@ const articles = [
     readTime: 5
   },
   {
-    title: 'Revolutionary Medical Treatment Shows Promise',
-    slug: 'revolutionary-medical-treatment-shows-promise',
-    excerpt: 'Clinical trials reveal breakthrough therapy could transform treatment for previously incurable conditions.',
+    title: 'علاج طبي ثوري يظهر نتائج واعدة',
+    slug: 'revolutionary-medical-treatment-promise',
+    excerpt: 'تكشف التجارب السريرية عن علاج اختراقي يمكن أن يحول علاج الحالات التي كانت تعتبر غير قابلة للشفاء سابقاً.',
     content: `
-      <p>A groundbreaking medical treatment has shown remarkable success in clinical trials, offering hope for patients with conditions previously considered untreatable.</p>
+      <p>أظهر علاج طبي رائد نجاحاً ملحوظاً في التجارب السريرية، مما يوفر الأمل للمرضى الذين يعانون من حالات كانت تعتبر سابقاً غير قابلة للعلاج.</p>
       
-      <h2>Clinical Results</h2>
-      <p>Phase III trials demonstrated significant improvement in patient outcomes with minimal side effects.</p>
+      <h2>النتائج السريرية</h2>
+      <p>أظهرت تجارب المرحلة الثالثة تحسناً كبيراً في نتائج المرضى مع آثار جانبية قليلة.</p>
       
-      <h2>Treatment Mechanism</h2>
-      <p>The therapy works by targeting specific cellular pathways, representing a new approach to personalized medicine.</p>
+      <h2>آلية العلاج</h2>
+      <p>يعمل العلاج من خلال استهداف مسارات خلوية محددة، مما يمثل نهجاً جديداً للطب الشخصي.</p>
       
-      <h2>Future Availability</h2>
-      <p>Regulatory approval is expected within the next year, making this treatment accessible to patients worldwide.</p>
+      <h2>التوفر المستقبلي</h2>
+      <p>من المتوقع الحصول على الموافقة التنظيمية خلال العام القادم، مما يجعل هذا العلاج متاحاً للمرضى في جميع أنحاء العالم.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=800&h=400&fit=crop',
-      alt: 'Medical research laboratory with scientists working'
+      alt: 'مختبر أبحاث طبية مع علماء يعملون'
     },
-    tags: ['health', 'medical', 'research', 'breakthrough'],
+    tags: ['صحة', 'طبي', 'بحث', 'اختراق'],
     status: 'published',
     featured: true,
     publishedAt: new Date(Date.now() - 432000000),
@@ -263,26 +263,26 @@ const articles = [
     readTime: 7
   },
   {
-    title: 'Streaming Wars Heat Up with New Platform Launch',
-    slug: 'streaming-wars-heat-up-with-new-platform-launch',
-    excerpt: 'Another major player enters the competitive streaming market with exclusive content and innovative features.',
+    title: 'حروب البث تشتعل مع إطلاق منصة جديدة',
+    slug: 'streaming-wars-new-platform-launch',
+    excerpt: 'لاعب كبير آخر يدخل سوق البث التنافسي مع محتوى حصري وميزات مبتكرة.',
     content: `
-      <p>The entertainment industry welcomes a new streaming platform that promises to shake up the competitive landscape with unique offerings.</p>
+      <p>ترحب صناعة الترفيه بمنصة بث جديدة تعد بإحداث تغيير في المشهد التنافسي من خلال عروض فريدة.</p>
       
-      <h2>Exclusive Content</h2>
-      <p>The platform launches with a slate of original series and films from renowned creators and A-list talent.</p>
+      <h2>المحتوى الحصري</h2>
+      <p>تنطلق المنصة مع مجموعة من المسلسلات والأفلام الأصلية من مبدعين مشهورين ومواهب من الدرجة الأولى.</p>
       
-      <h2>Technology Innovation</h2>
-      <p>Advanced recommendation algorithms and interactive features set this platform apart from existing competitors.</p>
+      <h2>الابتكار التكنولوجي</h2>
+      <p>خوارزميات التوصية المتقدمة والميزات التفاعلية تميز هذه المنصة عن المنافسين الحاليين.</p>
       
-      <h2>Market Impact</h2>
-      <p>Industry analysts predict significant shifts in market share as consumers evaluate their streaming subscriptions.</p>
+      <h2>تأثير السوق</h2>
+      <p>يتوقع محللو الصناعة تحولات كبيرة في حصة السوق مع قيام المستهلكين بتقييم اشتراكات البث الخاصة بهم.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1522869635100-9f4c5e86aa37?w=800&h=400&fit=crop',
-      alt: 'Streaming entertainment on multiple devices'
+      alt: 'ترفيه البث على أجهزة متعددة'
     },
-    tags: ['entertainment', 'streaming', 'technology', 'media'],
+    tags: ['ترفيه', 'بث', 'تكنولوجيا', 'إعلام'],
     status: 'published',
     featured: false,
     publishedAt: new Date(Date.now() - 518400000),
@@ -290,26 +290,26 @@ const articles = [
     readTime: 3
   },
   {
-    title: 'Climate Summit Reaches Historic Agreement',
-    slug: 'climate-summit-reaches-historic-agreement',
-    excerpt: 'World leaders unite on ambitious climate action plan with concrete targets and funding commitments.',
+    title: 'قمة المناخ تصل إلى اتفاق تاريخي',
+    slug: 'climate-summit-historic-agreement',
+    excerpt: 'قادة العالم يتحدون حول خطة طموحة للعمل المناخي مع أهداف ملموسة والتزامات بالتمويل.',
     content: `
-      <p>An unprecedented climate summit has concluded with a historic agreement that sets ambitious targets for global carbon reduction and environmental protection.</p>
+      <p>اختتمت قمة مناخية لم يسبق لها مثيل باتفاق تاريخي يضع أهدافاً طموحة لتقليل الكربون العالمي وحماية البيئة.</p>
       
-      <h2>Key Commitments</h2>
-      <p>Nations have pledged to achieve net-zero emissions by 2050 with intermediate milestones every five years.</p>
+      <h2>الالتزامات الرئيسية</h2>
+      <p>تعهدت الدول بتحقيق صافي انبعاثات صفرية بحلول عام 2050 مع معالم وسيطة كل خمس سنوات.</p>
       
-      <h2>Funding Mechanisms</h2>
-      <p>A new international fund will support developing countries in their transition to renewable energy systems.</p>
+      <h2>آليات التمويل</h2>
+      <p>سيدعم صندوق دولي جديد البلدان النامية في انتقالها إلى أنظمة الطاقة المتجددة.</p>
       
-      <h2>Implementation Timeline</h2>
-      <p>The agreement includes binding commitments with regular progress reviews and accountability measures.</p>
+      <h2>الجدول الزمني للتنفيذ</h2>
+      <p>يتضمن الاتفاق التزامات ملزمة مع مراجعات منتظمة للتقدم وتدابير المساءلة.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=800&h=400&fit=crop',
-      alt: 'Wind turbines in a green landscape representing renewable energy'
+      alt: 'توربينات الرياح في مناظر طبيعية خضراء تمثل الطاقة المتجددة'
     },
-    tags: ['climate', 'environment', 'politics', 'sustainability'],
+    tags: ['مناخ', 'بيئة', 'سياسة', 'استدامة'],
     status: 'published',
     featured: true,
     publishedAt: new Date(Date.now() - 604800000),
@@ -317,26 +317,26 @@ const articles = [
     readTime: 6
   },
   {
-    title: 'Cryptocurrency Market Sees Major Institutional Adoption',
-    slug: 'cryptocurrency-market-sees-major-institutional-adoption',
-    excerpt: 'Major financial institutions announce integration of cryptocurrency services amid growing mainstream acceptance.',
+    title: 'سوق العملات المشفرة يشهد تبنياً مؤسسياً كبيراً',
+    slug: 'cryptocurrency-institutional-adoption',
+    excerpt: 'المؤسسات المالية الكبرى تعلن عن دمج خدمات العملات المشفرة وسط قبول متزايد في التيار الرئيسي.',
     content: `
-      <p>The cryptocurrency market has reached a new milestone with several major financial institutions announcing comprehensive digital asset services.</p>
+      <p>وصل سوق العملات المشفرة إلى معلم جديد مع إعلان عدة مؤسسات مالية كبرى عن خدمات شاملة للأصول الرقمية.</p>
       
-      <h2>Institutional Services</h2>
-      <p>Traditional banks are now offering cryptocurrency custody, trading, and investment services to their clients.</p>
+      <h2>الخدمات المؤسسية</h2>
+      <p>تقدم البنوك التقليدية الآن خدمات حفظ وتداول واستثمار العملات المشفرة لعملائها.</p>
       
-      <h2>Regulatory Clarity</h2>
-      <p>Recent regulatory guidance has provided the framework needed for institutional adoption and consumer protection.</p>
+      <h2>الوضوح التنظيمي</h2>
+      <p>وفرت التوجيهات التنظيمية الأخيرة الإطار اللازم للتبني المؤسسي وحماية المستهلك.</p>
       
-      <h2>Market Implications</h2>
-      <p>This development is expected to bring greater stability and legitimacy to the cryptocurrency ecosystem.</p>
+      <h2>الآثار على السوق</h2>
+      <p>من المتوقع أن تجلب هذه التطورات استقراراً ومشروعية أكبر لنظام العملات المشفرة البيئي.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1621761191319-c6fb62004040?w=800&h=400&fit=crop',
-      alt: 'Cryptocurrency and blockchain technology concept'
+      alt: 'مفهوم العملة المشفرة وتكنولوجيا البلوك تشين'
     },
-    tags: ['cryptocurrency', 'finance', 'blockchain', 'business'],
+    tags: ['عملة-مشفرة', 'مالية', 'بلوك-تشين', 'أعمال'],
     status: 'published',
     featured: false,
     publishedAt: new Date(Date.now() - 691200000),
@@ -344,26 +344,26 @@ const articles = [
     readTime: 5
   },
   {
-    title: 'Space Exploration Milestone: Mars Mission Success',
-    slug: 'space-exploration-milestone-mars-mission-success',
-    excerpt: 'Historic Mars mission achieves breakthrough discoveries about the possibility of ancient life on the red planet.',
+    title: 'معلم في استكشاف الفضاء: نجاح مهمة المريخ',
+    slug: 'space-exploration-mars-mission-success',
+    excerpt: 'مهمة المريخ التاريخية تحقق اكتشافات اختراقية حول إمكانية وجود حياة قديمة على الكوكب الأحمر.',
     content: `
-      <p>A groundbreaking Mars mission has achieved remarkable success, providing unprecedented insights into the planet's geology and potential for ancient life.</p>
+      <p>حققت مهمة المريخ الرائدة نجاحاً ملحوظاً، مما وفر رؤى لم يسبق لها مثيل في جيولوجيا الكوكب وإمكانية وجود حياة قديمة.</p>
       
-      <h2>Scientific Discoveries</h2>
-      <p>The mission has uncovered evidence of ancient water systems and organic compounds that suggest Mars may have once harbored life.</p>
+      <h2>الاكتشافات العلمية</h2>
+      <p>كشفت المهمة عن أدلة على أنظمة مائية قديمة ومركبات عضوية تشير إلى أن المريخ ربما احتوى على حياة في الماضي.</p>
       
-      <h2>Technological Achievements</h2>
-      <p>Advanced robotics and communication systems have enabled real-time exploration and data collection from the Martian surface.</p>
+      <h2>الإنجازات التكنولوجية</h2>
+      <p>مكنت الروبوتات المتقدمة وأنظمة الاتصال من الاستكشاف في الوقت الفعلي وجمع البيانات من سطح المريخ.</p>
       
-      <h2>Future Missions</h2>
-      <p>These findings pave the way for future human missions to Mars and expanded exploration of our solar system.</p>
+      <h2>المهام المستقبلية</h2>
+      <p>تمهد هذه النتائج الطريق للمهام البشرية المستقبلية إلى المريخ والاستكشاف الموسع لنظامنا الشمسي.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1446776653964-20c1d3a81b06?w=800&h=400&fit=crop',
-      alt: 'Mars planet surface with rover and space exploration equipment'
+      alt: 'سطح كوكب المريخ مع الروبوت ومعدات استكشاف الفضاء'
     },
-    tags: ['space', 'mars', 'science', 'exploration'],
+    tags: ['فضاء', 'مريخ', 'علوم', 'استكشاف'],
     status: 'published',
     featured: true,
     publishedAt: new Date(Date.now() - 777600000),
@@ -371,26 +371,26 @@ const articles = [
     readTime: 8
   },
   {
-    title: 'World Cup 2024: Unexpected Upsets Rock Tournament',
-    slug: 'world-cup-2024-unexpected-upsets-rock-tournament',
-    excerpt: 'Underdog teams create major surprises as traditional powerhouses struggle in early tournament rounds.',
+    title: 'كأس العالم 2024: مفاجآت غير متوقعة تهز البطولة',
+    slug: 'world-cup-2024-unexpected-upsets',
+    excerpt: 'فرق المستضعفة تخلق مفاجآت كبيرة بينما تكافح القوى التقليدية في الجولات الأولى من البطولة.',
     content: `
-      <p>The 2024 World Cup has been full of surprises as several underdog teams have defeated traditional football powerhouses in stunning upsets.</p>
+      <p>كانت كأس العالم 2024 مليئة بالمفاجآت حيث هزمت عدة فرق مستضعفة عمالقة كرة القدم التقليديين في انتكاسات مذهلة.</p>
       
-      <h2>Major Upsets</h2>
-      <p>Three former world champions have already been eliminated in the group stages, marking one of the most unpredictable tournaments in history.</p>
+      <h2>الانتكاسات الكبرى</h2>
+      <p>تم إقصاء ثلاثة أبطال عالم سابقين في مرحلة المجموعات، مما يجعلها واحدة من أكثر البطولات التي لا يمكن التنبؤ بها في التاريخ.</p>
       
-      <h2>Rising Stars</h2>
-      <p>Young players from emerging football nations are capturing global attention with their exceptional performances.</p>
+      <h2>النجوم الصاعدة</h2>
+      <p>اللاعبون الشباب من دول كرة القدم الناشئة يجذبون الانتباه العالمي بأدائهم الاستثنائي.</p>
       
-      <h2>Tournament Dynamics</h2>
-      <p>The unexpected results have created new storylines and rivalries that are captivating fans worldwide.</p>
+      <h2>ديناميكيات البطولة</h2>
+      <p>خلقت النتائج غير المتوقعة قصصاً جديدة ومنافسات تأسر المشجعين في جميع أنحاء العالم.</p>
     `,
     image: {
       url: 'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=800&h=400&fit=crop',
-      alt: 'Soccer players celebrating victory in a stadium'
+      alt: 'لاعبو كرة القدم يحتفلون بالفوز في الملعب'
     },
-    tags: ['world-cup', 'soccer', 'sports', 'tournament'],
+    tags: ['كأس-العالم', 'كرة-قدم', 'رياضة', 'بطولة'],
     status: 'published',
     featured: false,
     publishedAt: new Date(Date.now() - 864000000),
@@ -497,8 +497,8 @@ const seedArticles = async (users, categories) => {
     const entertainmentCategory = categories.find(cat => cat.slug === 'entertainment');
     
     const editor = users.find(user => user.role === 'editor');
-    const john = users.find(user => user.name === 'John Doe');
-    const jane = users.find(user => user.name === 'Jane Smith');
+    const ahmed = users.find(user => user.name === 'أحمد محمد');
+    const fatima = users.find(user => user.name === 'فاطمة علي');
     const admin = users.find(user => user.role === 'admin');
 
     const articlesWithRefs = [
@@ -506,7 +506,7 @@ const seedArticles = async (users, categories) => {
       {
         ...articles[0], // AI Future
         category: techCategory._id,
-        author: john._id
+        author: ahmed._id
       },
       {
         ...articles[3], // Renewable Energy
@@ -518,22 +518,17 @@ const seedArticles = async (users, categories) => {
         category: techCategory._id,
         author: admin._id
       },
-      {
-        ...articles[11], // Quantum Computing
-        category: techCategory._id,
-        author: john._id
-      },
       
       // Sports Articles
       {
         ...articles[1], // Olympics
         category: sportsCategory._id,
-        author: jane._id
+        author: fatima._id
       },
       {
         ...articles[10], // World Cup
         category: sportsCategory._id,
-        author: jane._id
+        author: fatima._id
       },
       
       // Business Articles
@@ -559,14 +554,14 @@ const seedArticles = async (users, categories) => {
       {
         ...articles[5], // Medical Treatment
         category: healthCategory._id,
-        author: john._id
+        author: ahmed._id
       },
       
       // Entertainment Articles
       {
         ...articles[6], // Streaming Wars
         category: entertainmentCategory._id,
-        author: jane._id
+        author: fatima._id
       },
       
       // Science (using Technology category for now)
@@ -609,7 +604,7 @@ const seedDatabase = async () => {
     console.log('\n🔑 Default Login Credentials:');
     console.log('   Admin: admin@newswebsite.com / Admin123!');
     console.log('   Editor: editor@newswebsite.com / Editor123!');
-    console.log('   User: john@newswebsite.com / User123!');
+    console.log('   User: ahmed@newswebsite.com / User123!');
     
   } catch (error) {
     console.error('❌ Seeding failed:', error.message);

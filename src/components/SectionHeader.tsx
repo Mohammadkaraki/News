@@ -26,8 +26,8 @@ export default function SectionHeader({
           href={viewAllLink}
           className="mt-2 md:mt-0 text-primary hover:text-primary/80 text-sm font-medium flex items-center group"
         >
-          See all
-          <FiChevronRight className="ml-1 w-4 h-4 transition-transform group-hover:translate-x-1" />
+          مشاهدة الكل
+          <FiChevronRight className="mr-1 w-4 h-4 transition-transform group-hover:-translate-x-1 rtl-flip" />
         </Link>
       )}
     </div>

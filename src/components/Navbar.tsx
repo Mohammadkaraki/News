@@ -55,17 +55,17 @@ export default function Navbar() {
           <div className="flex items-center space-x-8">
             <Link href="/" className="flex-shrink-0 flex items-center">
               <h1 className="text-2xl font-bold text-primary">
-                <span className="bg-primary text-white px-2 py-1 rounded-md mr-1">N</span>
-                ews
+                <span className="bg-primary text-white px-2 py-1 rounded-md ml-1">أ</span>
+                خبار
               </h1>
             </Link>
             
-            <div className="hidden md:flex items-center space-x-6">
+            <div className="hidden md:flex items-center space-x-6 space-x-reverse">
               <Link 
                 href="/articles"
                 className="text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200"
               >
-                Latest
+                الأحدث
               </Link>
               {categories.slice(0, 4).map((category) => (
                 <Link 
@@ -80,17 +80,17 @@ export default function Navbar() {
                 href="/categories"
                 className="text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200"
               >
-                More
+                المزيد
               </Link>
             </div>
           </div>
 
           {/* Desktop Right Navigation */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-4 space-x-reverse">
             <button 
               onClick={() => setIsSearchOpen(!isSearchOpen)}
               className="p-2 text-gray-500 hover:text-primary transition-colors duration-200"
-              aria-label="Search"
+              aria-label="بحث"
             >
               <FiSearch className="w-5 h-5" />
             </button>
@@ -99,14 +99,14 @@ export default function Navbar() {
               <>
                 <button 
                   className="p-2 text-gray-500 hover:text-primary transition-colors duration-200 relative"
-                  aria-label="Notifications"
+                  aria-label="الإشعارات"
                 >
                   <FiBell className="w-5 h-5" />
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                  <span className="absolute -top-1 -left-1 w-3 h-3 bg-red-500 rounded-full"></span>
                 </button>
                 <button 
                   className="p-2 text-gray-500 hover:text-primary transition-colors duration-200"
-                  aria-label="Saved"
+                  aria-label="المحفوظات"
                 >
                   <FiBookmark className="w-5 h-5" />
                 </button>
@@ -134,41 +134,41 @@ export default function Navbar() {
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
-                        <FiUser className="w-4 h-4 mr-2" />
-                        Profile
+                        <FiUser className="w-4 h-4 ml-2" />
+                        الملف الشخصي
                       </Link>
                       <Link 
                         href="/settings"
                         className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => setIsProfileMenuOpen(false)}
                       >
-                        <FiSettings className="w-4 h-4 mr-2" />
-                        Settings
+                        <FiSettings className="w-4 h-4 ml-2" />
+                        الإعدادات
                       </Link>
                       <button 
                         onClick={handleLogout}
                         className="w-full flex items-center px-4 py-2 text-sm text-red-600 hover:bg-red-50"
                       >
-                        <FiLogOut className="w-4 h-4 mr-2" />
-                        Sign out
+                        <FiLogOut className="w-4 h-4 ml-2" />
+                        تسجيل الخروج
                       </button>
                     </div>
                   )}
                 </div>
               </>
             ) : (
-              <div className="flex items-center space-x-3">
+              <div className="flex items-center space-x-3 space-x-reverse">
                 <Link 
                   href="/login"
                   className="text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200"
                 >
-                  Sign in
+                  تسجيل الدخول
                 </Link>
                 <Link 
                   href="/register" 
                   className="btn btn-primary text-sm"
                 >
-                  Get started
+                  ابدأ الآن
                 </Link>
               </div>
             )}
