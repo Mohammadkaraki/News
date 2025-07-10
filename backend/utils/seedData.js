@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 // Import models
 const User = require('../models/User');
@@ -47,20 +48,12 @@ const users = [
 
 const categories = [
   {
-    name: 'تكنولوجيا',
-    slug: 'technology',
-    description: 'آخر أخبار التكنولوجيا والابتكارات',
+    name: 'عالم',
+    slug: 'world',
+    description: 'آخر أخبار العالم والأحداث الدولية',
     color: '#3B82F6',
-    icon: 'laptop',
+    icon: 'globe',
     sortOrder: 1
-  },
-  {
-    name: 'رياضة',
-    slug: 'sports',
-    description: 'أخبار الرياضة والتحديثات',
-    color: '#EF4444',
-    icon: 'trophy',
-    sortOrder: 2
   },
   {
     name: 'سياسة',
@@ -68,31 +61,31 @@ const categories = [
     description: 'الأخبار السياسية والتحليلات',
     color: '#8B5CF6',
     icon: 'building',
+    sortOrder: 2
+  },
+  {
+    name: 'اقتصاد',
+    slug: 'business',
+    description: 'أخبار الاقتصاد والأعمال والمالية',
+    color: '#10B981',
+    icon: 'briefcase',
     sortOrder: 3
   },
   {
-    name: 'أعمال',
-    slug: 'business',
-    description: 'أخبار الأعمال والمالية',
-    color: '#10B981',
-    icon: 'briefcase',
+    name: 'رياضة',
+    slug: 'sports',
+    description: 'أخبار الرياضة والتحديثات',
+    color: '#EF4444',
+    icon: 'trophy',
     sortOrder: 4
   },
   {
-    name: 'ترفيه',
+    name: 'فن',
     slug: 'entertainment',
-    description: 'أخبار الترفيه والمشاهير',
+    description: 'أخبار الفن والترفيه والمشاهير',
     color: '#F59E0B',
     icon: 'film',
     sortOrder: 5
-  },
-  {
-    name: 'صحة',
-    slug: 'health',
-    description: 'أخبار الصحة والعافية',
-    color: '#06B6D4',
-    icon: 'heart',
-    sortOrder: 6
   }
 ];
 
@@ -489,11 +482,10 @@ const seedCategories = async (adminUser) => {
 // Seed articles
 const seedArticles = async (users, categories) => {
   try {
-    const techCategory = categories.find(cat => cat.slug === 'technology');
-    const sportsCategory = categories.find(cat => cat.slug === 'sports');
-    const businessCategory = categories.find(cat => cat.slug === 'business');
+    const worldCategory = categories.find(cat => cat.slug === 'world');
     const politicsCategory = categories.find(cat => cat.slug === 'politics');
-    const healthCategory = categories.find(cat => cat.slug === 'health');
+    const businessCategory = categories.find(cat => cat.slug === 'business');
+    const sportsCategory = categories.find(cat => cat.slug === 'sports');
     const entertainmentCategory = categories.find(cat => cat.slug === 'entertainment');
     
     const editor = users.find(user => user.role === 'editor');
@@ -502,20 +494,44 @@ const seedArticles = async (users, categories) => {
     const admin = users.find(user => user.role === 'admin');
 
     const articlesWithRefs = [
-      // Technology Articles
+      // World Articles
       {
         ...articles[0], // AI Future
-        category: techCategory._id,
+        category: worldCategory._id,
         author: ahmed._id
       },
       {
         ...articles[3], // Renewable Energy
-        category: techCategory._id,
+        category: worldCategory._id,
+        author: editor._id
+      },
+      {
+        ...articles[9], // Mars Mission
+        category: worldCategory._id,
+        author: admin._id
+      },
+      
+      // Politics Articles
+      {
+        ...articles[4], // Political Reform
+        category: politicsCategory._id,
+        author: admin._id
+      },
+      {
+        ...articles[7], // Climate Summit
+        category: politicsCategory._id,
+        author: editor._id
+      },
+      
+      // Business Articles
+      {
+        ...articles[2], // Economic Outlook
+        category: businessCategory._id,
         author: editor._id
       },
       {
         ...articles[8], // Cryptocurrency
-        category: techCategory._id,
+        category: businessCategory._id,
         author: admin._id
       },
       
@@ -531,44 +547,16 @@ const seedArticles = async (users, categories) => {
         author: fatima._id
       },
       
-      // Business Articles
-      {
-        ...articles[2], // Economic Outlook
-        category: businessCategory._id,
-        author: editor._id
-      },
-      
-      // Politics Articles
-      {
-        ...articles[4], // Political Reform
-        category: politicsCategory._id,
-        author: admin._id
-      },
-      {
-        ...articles[7], // Climate Summit
-        category: politicsCategory._id,
-        author: editor._id
-      },
-      
-      // Health Articles
-      {
-        ...articles[5], // Medical Treatment
-        category: healthCategory._id,
-        author: ahmed._id
-      },
-      
       // Entertainment Articles
       {
         ...articles[6], // Streaming Wars
         category: entertainmentCategory._id,
         author: fatima._id
       },
-      
-      // Science (using Technology category for now)
       {
-        ...articles[9], // Mars Mission
-        category: techCategory._id,
-        author: admin._id
+        ...articles[5], // Medical Treatment (using entertainment for now)
+        category: entertainmentCategory._id,
+        author: ahmed._id
       }
     ];
 

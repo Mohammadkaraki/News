@@ -6,15 +6,12 @@ import { useState, useEffect } from 'react';
 import { FiSearch, FiMenu, FiX, FiBell, FiBookmark, FiUser, FiLogOut, FiSettings } from 'react-icons/fi';
 import SearchBar from './SearchBar';
 import { useAuth } from '@/context/AuthContext';
-import { categoryApi } from '@/lib/api';
-import type { Category } from '@/types/api';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [categories, setCategories] = useState<Category[]>([]);
   const { user, logout, isAuthenticated } = useAuth();
 
   useEffect(() => {
@@ -26,21 +23,14 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    // Fetch categories for navigation
-    const fetchCategories = async () => {
-      try {
-        const response = await categoryApi.getCategories();
-        if (response.success && response.data) {
-          setCategories(response.data.categories.slice(0, 6)); // Show first 6 categories
-        }
-      } catch (error) {
-        console.error('Failed to fetch categories:', error);
-      }
-    };
-
-    fetchCategories();
-  }, []);
+  // Fixed navigation items in the specified order
+  const navItems = [
+    { name: 'عالم', slug: 'world', href: '/category/world' },
+    { name: 'سياسة', slug: 'politics', href: '/category/politics' },
+    { name: 'اقتصاد', slug: 'business', href: '/category/business' },
+    { name: 'رياضة', slug: 'sports', href: '/category/sports' },
+    { name: 'فن', slug: 'entertainment', href: '/category/entertainment' },
+  ];
 
   const handleLogout = () => {
     logout();
@@ -67,21 +57,15 @@ export default function Navbar() {
               >
                 الأحدث
               </Link>
-              {categories.slice(0, 4).map((category) => (
+              {navItems.map((item) => (
                 <Link 
-                  key={category.id}
-                  href={`/category/${category.slug}`}
+                  key={item.slug}
+                  href={item.href}
                   className="text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200"
                 >
-                  {category.name}
+                  {item.name}
                 </Link>
               ))}
-              <Link 
-                href="/categories"
-                className="text-sm font-medium text-gray-700 hover:text-primary transition-colors duration-200"
-              >
-                المزيد
-              </Link>
             </div>
           </div>
 
@@ -206,25 +190,18 @@ export default function Navbar() {
                 className="px-2 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors duration-200"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Latest News
+                الأحدث
               </Link>
-              {categories.map((category) => (
+              {navItems.map((item) => (
                 <Link 
-                  key={category.id}
-                  href={`/category/${category.slug}`}
+                  key={item.slug}
+                  href={item.href}
                   className="px-2 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors duration-200"
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  {category.name}
+                  {item.name}
                 </Link>
               ))}
-              <Link 
-                href="/categories"
-                className="px-2 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors duration-200"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                All Categories
-              </Link>
               
               <hr className="my-2 border-gray-100" />
               
@@ -244,7 +221,7 @@ export default function Navbar() {
                     className="px-2 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Profile
+                    الملف الشخصي
                   </Link>
                   <button 
                     onClick={() => {
@@ -253,7 +230,7 @@ export default function Navbar() {
                     }}
                     className="w-full text-left px-2 py-2 text-base font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors duration-200"
                   >
-                    Sign out
+                    تسجيل الخروج
                   </button>
                 </>
               ) : (
@@ -263,14 +240,14 @@ export default function Navbar() {
                     className="px-2 py-2 text-base font-medium text-gray-700 hover:bg-gray-50 hover:text-primary rounded-lg transition-colors duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Sign in
+                    تسجيل الدخول
                   </Link>
                   <Link 
                     href="/register" 
                     className="px-2 py-2 text-base font-medium bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Get started
+                    ابدأ الآن
                   </Link>
                 </>
               )}

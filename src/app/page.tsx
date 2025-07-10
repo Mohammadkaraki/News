@@ -16,8 +16,11 @@ import type { Article, Category } from '@/types/api';
 export default function HomePage() {
   const [featuredArticles, setFeaturedArticles] = useState<Article[]>([]);
   const [latestArticles, setLatestArticles] = useState<Article[]>([]);
+  const [worldArticles, setWorldArticles] = useState<Article[]>([]);
+  const [politicsArticles, setPoliticsArticles] = useState<Article[]>([]);
   const [businessArticles, setBusinessArticles] = useState<Article[]>([]);
   const [sportsArticles, setSportsArticles] = useState<Article[]>([]);
+  const [entertainmentArticles, setEntertainmentArticles] = useState<Article[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,16 +41,22 @@ export default function HomePage() {
     // Add to latest articles (at the beginning)
     setLatestArticles(prev => [newArticle, ...prev.slice(0, 7)]);
     
-    // If it's a featured article, add to featured
-    if (newArticle.featured) {
+    // If it's from world or politics category, add to featured
+    if (newArticle.category.slug === 'world' || newArticle.category.slug === 'politics') {
       setFeaturedArticles(prev => [newArticle, ...prev.slice(0, 3)]);
     }
     
     // Add to category-specific arrays
-    if (newArticle.category.slug === 'business') {
+    if (newArticle.category.slug === 'world') {
+      setWorldArticles(prev => [newArticle, ...prev.slice(0, 7)]);
+    } else if (newArticle.category.slug === 'politics') {
+      setPoliticsArticles(prev => [newArticle, ...prev.slice(0, 3)]);
+    } else if (newArticle.category.slug === 'business') {
       setBusinessArticles(prev => [newArticle, ...prev.slice(0, 2)]);
-    } else if (newArticle.category.slug === 'sports' || newArticle.category.slug === 'sport') {
+    } else if (newArticle.category.slug === 'sports') {
       setSportsArticles(prev => [newArticle, ...prev.slice(0, 3)]);
+    } else if (newArticle.category.slug === 'entertainment') {
+      setEntertainmentArticles(prev => [newArticle, ...prev.slice(0, 3)]);
     }
   }, []);
 
@@ -66,48 +75,57 @@ export default function HomePage() {
         setLoading(true);
         setError(null);
 
-        // Fetch categories first to get their slugs
+                // Fetch categories first to get their slugs
         const categoriesResponse = await categoryApi.getCategories();
+        let worldSlug = '';
+        let politicsSlug = '';
         let businessSlug = '';
         let sportsSlug = '';
+        let entertainmentSlug = '';
         
         if (categoriesResponse.success && categoriesResponse.data) {
           setCategories(categoriesResponse.data.categories || []);
           
-          // Find business and sports category slugs
+          // Find all category slugs
           const categories = categoriesResponse.data.categories || [];
-          const businessCategory = categories.find(
-            cat => cat.name.toLowerCase().includes('business') || cat.slug === 'business'
-          );
-          const sportsCategory = categories.find(
-            cat => cat.name.toLowerCase().includes('sport') || cat.slug === 'sports' || cat.slug === 'sport'
-          );
+          const worldCategory = categories.find(cat => cat.slug === 'world');
+          const politicsCategory = categories.find(cat => cat.slug === 'politics');
+          const businessCategory = categories.find(cat => cat.slug === 'business');
+          const sportsCategory = categories.find(cat => cat.slug === 'sports');
+          const entertainmentCategory = categories.find(cat => cat.slug === 'entertainment');
           
+          worldSlug = worldCategory?.slug || '';
+          politicsSlug = politicsCategory?.slug || '';
           businessSlug = businessCategory?.slug || '';
           sportsSlug = sportsCategory?.slug || '';
+          entertainmentSlug = entertainmentCategory?.slug || '';
         }
 
         // Fetch all required data in parallel
         const promises = [
-          articleApi.getFeaturedArticles(),
-          articleApi.getArticles({ limit: 8 }),
+          articleApi.getArticles({ limit: 8 }), // Latest articles for general use
         ];
 
         // Add category-specific requests if we found the categories
+        if (worldSlug) {
+          promises.push(articleApi.getArticles({ category: worldSlug, limit: 8 }));
+        }
+        if (politicsSlug) {
+          promises.push(articleApi.getArticles({ category: politicsSlug, limit: 4 }));
+        }
         if (businessSlug) {
           promises.push(articleApi.getArticles({ category: businessSlug, limit: 3 }));
         }
         if (sportsSlug) {
           promises.push(articleApi.getArticles({ category: sportsSlug, limit: 4 }));
         }
+        if (entertainmentSlug) {
+          promises.push(articleApi.getArticles({ category: entertainmentSlug, limit: 4 }));
+        }
 
         const responses = await Promise.all(promises);
         
-        const [featuredResponse, latestResponse, ...categoryResponses] = responses;
-
-        if (featuredResponse.success && featuredResponse.data) {
-          setFeaturedArticles(featuredResponse.data.articles);
-        }
+        const [latestResponse, ...categoryResponses] = responses;
 
         if (latestResponse.success && latestResponse.data) {
           setLatestArticles(latestResponse.data.articles);
@@ -115,6 +133,18 @@ export default function HomePage() {
 
         // Set category-specific articles
         let responseIndex = 0;
+        if (worldSlug && categoryResponses[responseIndex]) {
+          if (categoryResponses[responseIndex].success && categoryResponses[responseIndex].data) {
+            setWorldArticles(categoryResponses[responseIndex].data?.articles || []);
+          }
+          responseIndex++;
+        }
+        if (politicsSlug && categoryResponses[responseIndex]) {
+          if (categoryResponses[responseIndex].success && categoryResponses[responseIndex].data) {
+            setPoliticsArticles(categoryResponses[responseIndex].data?.articles || []);
+          }
+          responseIndex++;
+        }
         if (businessSlug && categoryResponses[responseIndex]) {
           if (categoryResponses[responseIndex].success && categoryResponses[responseIndex].data) {
             setBusinessArticles(categoryResponses[responseIndex].data?.articles || []);
@@ -125,10 +155,35 @@ export default function HomePage() {
           if (categoryResponses[responseIndex].success && categoryResponses[responseIndex].data) {
             setSportsArticles(categoryResponses[responseIndex].data?.articles || []);
           }
+          responseIndex++;
+        }
+        if (entertainmentSlug && categoryResponses[responseIndex]) {
+          if (categoryResponses[responseIndex].success && categoryResponses[responseIndex].data) {
+            setEntertainmentArticles(categoryResponses[responseIndex].data?.articles || []);
+          }
         }
 
+        // Set featured articles as combination of world and politics articles
+        // We need to get the articles from the responses first
+        let worldArticlesData: Article[] = [];
+        let politicsArticlesData: Article[] = [];
+        
+        responseIndex = 0;
+        if (worldSlug && categoryResponses[responseIndex]) {
+          worldArticlesData = categoryResponses[responseIndex].data?.articles || [];
+          responseIndex++;
+        }
+        if (politicsSlug && categoryResponses[responseIndex]) {
+          politicsArticlesData = categoryResponses[responseIndex].data?.articles || [];
+        }
+        
+        const combinedFeatured = [...worldArticlesData, ...politicsArticlesData]
+          .sort((a, b) => new Date(b.createdAt || '').getTime() - new Date(a.createdAt || '').getTime())
+          .slice(0, 4);
+        setFeaturedArticles(combinedFeatured);
+
         // Check if any critical data failed to load
-        if (!featuredResponse.success || !latestResponse.success) {
+        if (!latestResponse.success) {
           setError('Failed to load some content. Please refresh the page.');
         }
       } catch (err) {
@@ -405,7 +460,7 @@ export default function HomePage() {
       {categories.length > 0 && (
         <section className="container mb-16">
           <SectionHeader 
-            title="Browse Categories" 
+            title="تصفح التصنيفات" 
             viewAllLink="/categories"
           />
           
@@ -429,15 +484,15 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Latest News Section */}
+      {/* World News Section */}
       <section className="container mb-16">
         <SectionHeader 
-          title="Latest News" 
-          viewAllLink="/articles"
+          title="عالم" 
+          viewAllLink="/category/world"
         />
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {latestArticles.slice(0, 8).map((article) => (
+          {worldArticles.slice(0, 8).map((article) => (
             <ArticleCard 
               key={article.id} 
               article={article} 
@@ -505,16 +560,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Must Read Section */}
+      {/* Politics Section */}
       <section className="container mb-16">
         <SectionHeader 
-          title="Must Read" 
-          viewAllLink="/articles?section=must-read"
+          title="سياسة" 
+          viewAllLink="/category/politics"
         />
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Main Featured Article - Takes 8 columns */}
-          {latestArticles.slice(0, 1).map((article) => (
+          {politicsArticles.slice(0, 1).map((article) => (
             <div key={article.id} className="lg:col-span-8">
               <div className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300">
                 <div className="relative aspect-[16/10] overflow-hidden">
@@ -594,7 +649,7 @@ export default function HomePage() {
               </h4>
               
               <div className="space-y-4">
-                {latestArticles.slice(1, 4).map((article, index) => (
+                {politicsArticles.slice(1, 4).map((article, index) => (
                   <article key={article.id} className="group">
                     <div className="flex space-x-4">
                       {/* Article Number */}
@@ -697,16 +752,16 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Editor's Pick Section */}
+      {/* Business Section */}
       <section className="container mb-16">
         <SectionHeader 
-          title="Editor's Pick" 
-          viewAllLink="/articles?section=editors-pick"
+          title="اقتصاد" 
+          viewAllLink="/category/business"
         />
         
         <div className="space-y-6">
           {/* Main featured article */}
-          {latestArticles.slice(4, 5).map((article) => (
+          {businessArticles.slice(0, 1).map((article) => (
             <div key={article.id} className="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-lg overflow-hidden shadow-md">
               <div className="grid md:grid-cols-2 gap-6 p-6">
                 <div className="order-2 md:order-1">
@@ -751,23 +806,23 @@ export default function HomePage() {
           
           {/* Secondary articles grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {latestArticles.slice(5, 9).map((article) => (
+            {businessArticles.slice(1, 5).map((article) => (
               <ArticleCard key={article.id} article={article} />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Business Section */}
-      {businessArticles.length > 0 && (
+      {/* Sports Section */}
+      {sportsArticles.length > 0 && (
         <section className="container mb-16">
           <SectionHeader 
-            title="Business" 
-            viewAllLink="/category/business"
+            title="رياضة" 
+            viewAllLink="/category/sports"
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {businessArticles.map((article) => (
+            {sportsArticles.map((article) => (
             <div key={article.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               <Link href={`/article/${article.slug}`} className="block relative aspect-video">
                 <Image
@@ -813,32 +868,32 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Sport News Section */}
-      {sportsArticles.length > 0 && (
+      {/* Entertainment Section */}
+      {entertainmentArticles.length > 0 && (
         <section className="container mb-16">
           <SectionHeader 
-            title="Sport News" 
-            viewAllLink="/category/sports"
+            title="فن" 
+            viewAllLink="/category/entertainment"
           />
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {sportsArticles.map((article) => (
+            {entertainmentArticles.map((article) => (
             <div key={article.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
               <Link href={`/article/${article.slug}`} className="block relative aspect-video">
-                <Image
-                  {...getSafeImageProps(
-                    article.image?.url || '',
-                    article.image?.alt || article.title,
-                    'sports'
-                  )}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-semibold">
-                    🏆 Sports
-                  </span>
-                </div>
+                                  <Image
+                    {...getSafeImageProps(
+                      article.image?.url || '',
+                      article.image?.alt || article.title,
+                      'entertainment'
+                    )}
+                    fill
+                    className="object-cover"
+                  />
+                  <div className="absolute top-4 left-4">
+                    <span className="bg-purple-600 text-white px-2 py-1 rounded text-xs font-semibold">
+                      🎭 Entertainment
+                    </span>
+                  </div>
               </Link>
               <div className="p-4">
                 <div className="flex items-center space-x-2 mb-2">
@@ -894,7 +949,7 @@ export default function HomePage() {
       <section className="container mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <div className="text-3xl font-bold text-primary mb-2">{latestArticles.length}+</div>
+            <div className="text-3xl font-bold text-primary mb-2">{(worldArticles.length + politicsArticles.length + businessArticles.length + sportsArticles.length + entertainmentArticles.length)}+</div>
             <div className="text-gray-600">Articles Published</div>
           </div>
           <div>

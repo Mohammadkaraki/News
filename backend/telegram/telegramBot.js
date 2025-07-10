@@ -5,27 +5,45 @@ const fs = require('fs-extra');
 const path = require('path');
 const axios = require('axios');
 const sharp = require('sharp');
-require('dotenv').config();
+require('dotenv').config({ path: require('path').resolve(__dirname, '../.env') });
 
 const TelegramService = require('./services/TelegramService');
-const ArticleService = require('./services/ArticleService');
+const HybridArticleService = require('./services/HybridArticleService');
 const ImageService = require('./services/ImageService');
 
-// Channel to Category mapping
+// Channel to Category mapping - matches navbar: عالم سياسة اقتصاد رياضة فن
 const CHANNEL_CATEGORY_MAP = {
-    'deep123321123': 'sports',
-    '2884922529': 'sports', // Deep123321 channel ID
-    // Add more channel IDs and their corresponding categories
-    // 'channel_username': 'category_slug',
-    // '@SportNewsChannel': 'sports',
-    // '@BusinessDailyChannel': 'business'
+    // Politics (سياسة) - Deep123321 channel
+    'deep123321123': 'politics',
+    '2884922529': 'politics',
+    '-2884922529': 'politics',
+    
+    // World News (عالم) - AlarabyTelevision channel  
+    'AlarabyTelevision': 'world',
+    '@AlarabyTelevision': 'world',
+    'التلفزيون العربي': 'world',
+    
+    // Economy/Business (اقتصاد) - CNN Business channels
+    'CNNBusinessAr': 'business',
+    '@CNNBusinessAr': 'business',
+    'CNNBusiness': 'business',
+    '@CNNBusiness': 'business',
+    'CNN Business Arabic | الاقتصادية CNN': 'business',
+    
+    // Sports (رياضة) - beINSPORTS channel
+    'beINSPORTS': 'sports',
+    '@beINSPORTS': 'sports',
+    
+    // Art/Entertainment (فن) - muraselonDrama channel
+    'muraselonDrama': 'entertainment',
+    '@muraselonDrama': 'entertainment'
 };
 
 class TelegramBot {
     constructor() {
         this.client = null;
         this.telegramService = new TelegramService();
-        this.articleService = new ArticleService();
+        this.articleService = new HybridArticleService();
         this.imageService = new ImageService();
         
         // Create uploads directory if it doesn't exist
@@ -149,9 +167,13 @@ class TelegramBot {
 
             // Download image
             console.log('📥 Downloading image...');
-            await this.client.downloadMedia(message.media, {
-                file: tempPath
-            });
+            const buffer = await this.client.downloadMedia(message.media);
+            await fs.writeFile(tempPath, buffer);
+            
+            // Check if file exists
+            if (!await fs.pathExists(tempPath)) {
+                throw new Error(`Downloaded file not found: ${tempPath}`);
+            }
 
             // Process image (resize, optimize)
             console.log('🖼️  Processing image...');
@@ -184,34 +206,23 @@ class TelegramBot {
 
     async createArticleFromMessage(caption, imageUrl, categorySlug, messageDate) {
         try {
-            // Extract title from caption (first sentence or first 60 chars)
-            const title = this.extractTitle(caption);
-            
-            // Extract excerpt (first 200 chars)
-            const excerpt = caption.substring(0, 200).trim();
-            
-            // Create article data
-            const articleData = {
-                title,
-                excerpt,
-                content: caption,
+            // Create Telegram data object for AI enhancement
+            const telegramData = {
+                caption,
                 image: {
                     url: imageUrl,
-                    alt: title,
-                    caption: excerpt
+                    alt: caption.substring(0, 60),
+                    caption: caption.substring(0, 200)
                 },
                 categorySlug,
-                status: 'published',
                 publishedAt: messageDate,
-                tags: this.extractTags(caption),
-                // Use default author or system user
                 source: 'telegram'
             };
 
-            // Create article through service
-            await this.articleService.createArticle(articleData);
+            // Create article through HybridArticleService (includes AI enhancement)
+            const createdArticle = await this.articleService.createArticleFromTelegram(telegramData);
             
-            console.log(`✅ Article created: "${title}"`);
+            console.log(`✅ AI-Enhanced article created: "${createdArticle.title}"`);
             
         } catch (error) {
             console.error('Error creating article:', error);
