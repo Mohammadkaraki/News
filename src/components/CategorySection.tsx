@@ -104,7 +104,7 @@ export default function CategorySection({
                 </Link>
                 <p className="text-gray-600 mb-4 line-clamp-2">{article.excerpt}</p>
                 <div className="flex items-center justify-between text-sm text-gray-500">
-                  <span>{getSafeAuthorInfo(article.author).name}</span>
+                  <span>DeepNews</span>
                   <span>{article.timeAgo}</span>
                 </div>
               </div>

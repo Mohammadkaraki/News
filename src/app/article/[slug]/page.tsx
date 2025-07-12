@@ -19,6 +19,11 @@ interface ArticlePageProps {
   };
 }
 
+// Helper for random large numbers
+function getRandomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export default function ArticlePage({ params }: ArticlePageProps) {
   const { slug } = params;
   const [article, setArticle] = useState<Article | null>(null);
@@ -82,81 +87,110 @@ export default function ArticlePage({ params }: ArticlePageProps) {
 
   return (
     <article className="min-h-screen bg-white">
-      {/* Hero Section with Gradient Background */}
-      <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative container py-16 md:py-20">
-          <div className="max-w-4xl mx-auto">
-            {/* Breadcrumb */}
-            <nav className="flex items-center space-x-2 text-sm mb-8 opacity-90">
-              <Link href="/" className="hover:text-primary transition-colors">الرئيسية</Link>
-              <span>/</span>
-              <Link href={`/category/${article.category.slug}`} className="hover:text-primary transition-colors">
-                {article.category.name}
+      {/* Enhanced Hero Section with Modern Design */}
+      <div className="relative bg-gradient-to-br from-blue-950 via-indigo-900 to-blue-800 text-white overflow-hidden min-h-[32vh] flex flex-col justify-end pb-12">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-indigo-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-blue-400/5 rounded-full blur-2xl animate-pulse delay-500"></div>
+        </div>
+        
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+        
+        <div className="relative container py-8 md:py-12 flex flex-col justify-end">
+          <div className="max-w-5xl mx-auto">
+            {/* Enhanced Breadcrumb */}
+            <nav className="flex items-center space-x-3 text-xs mb-4 opacity-90 font-cairo">
+              <Link href="/" className="hover:text-blue-300 transition-colors duration-300 flex items-center">
+                <span className="bg-white/10 backdrop-blur-sm px-2 py-1 rounded-full">الرئيسية</span>
               </Link>
-              <span>/</span>
-              <span className="text-gray-300 truncate">{article.title}</span>
+              <span className="text-blue-300">/</span>
+              <Link href={`/category/${article.category.slug}`} className="hover:text-blue-300 transition-colors duration-300">
+                <span className="bg-white/10 backdrop-blur-sm px-2 py-1 rounded-full">{article.category.name}</span>
+              </Link>
+              <span className="text-blue-300">/</span>
+              <span className="text-gray-300 truncate bg-white/5 backdrop-blur-sm px-2 py-1 rounded-full">{article.title}</span>
             </nav>
 
-            {/* Category Badge */}
-            <div className="mb-6">
-              <CategoryBadge category={article.category} />
+            {/* Enhanced Category Badge */}
+            <div className="mb-4">
+              <div className="inline-flex items-center px-3 py-1.5 bg-white/15 backdrop-blur-xl rounded-full border border-white/20 shadow-lg">
+                <span className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2 animate-pulse"></span>
+                <span className="text-blue-100 font-cairo font-semibold text-sm">{article.category.name}</span>
+              </div>
             </div>
             
-            {/* Article Title */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold leading-tight mb-6 text-white">
-              {article.title}
+            {/* Enhanced Article Title */}
+            <h1 className="text-xl md:text-2xl lg:text-3xl font-bold leading-tight mb-3 text-white font-cairo drop-shadow-lg line-clamp-2">
+              <span className="bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">
+                {article.title}
+              </span>
             </h1>
             
-            {/* Article Excerpt */}
-            <p className="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed max-w-3xl">
+            {/* Enhanced Article Excerpt */}
+            <p className="text-sm md:text-base text-blue-100 mb-4 leading-relaxed max-w-3xl font-cairo line-clamp-2">
               {article.excerpt}
             </p>
             
-            {/* Author and Meta Info */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+            {/* Enhanced Author and Meta Info */}
+            <div className="flex items-center justify-between gap-3">
               <div className="flex items-center">
-                <div className="w-14 h-14 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-lg mr-4 shadow-lg">
-                  {getSafeAuthorInfo(article.author).initials}
+                <div className="relative">
+                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-indigo-600 to-blue-700 rounded-full flex items-center justify-center text-white font-bold text-base mr-3 shadow-xl border-2 border-white/20">
+                    DN
+                  </div>
+                  <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border border-white flex items-center justify-center">
+                    <div className="w-0.5 h-0.5 bg-white rounded-full"></div>
+                  </div>
                 </div>
-                <div>
-                  <p className="font-semibold text-lg text-white">{getSafeAuthorInfo(article.author).name}</p>
-                  <div className="flex items-center text-gray-300 text-sm space-x-6 mt-1">
-                    <div className="flex items-center">
-                      <FiCalendar className="mr-2" />
-                      <span>{article.timeAgo}</span>
+                <div className="ml-2">
+                  <p className="font-bold text-base text-white font-cairo">DeepNews</p>
+                  <div className="flex flex-row-reverse items-center text-blue-200 text-xs space-x-2 mt-0.5 font-cairo">
+                    <div className="flex items-center bg-white/10 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
+                      <FiCalendar className="ml-1 w-2.5 h-2.5" />
+                      <span dir="ltr">{(() => {
+                        if (typeof article.timeAgo === 'string' && /\d$/.test(article.timeAgo)) {
+                          const parts = article.timeAgo.split(' ');
+                          if (!isNaN(Number(parts[parts.length - 1]))) {
+                            const num = parts.pop();
+                            return num + ' ' + parts.join(' ');
+                          }
+                        }
+                        return article.timeAgo;
+                      })()}</span>
                     </div>
-                    <div className="flex items-center">
-                      <FiClock className="mr-2" />
-                      <span>{article.readTime} دقائق قراءة</span>
+                    <div className="flex items-center bg-white/10 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
+                      <FiClock className="mr-1 w-2.5 h-2.5" />
+                      <span>{article.readTime}د</span>
                     </div>
-                    <div className="flex items-center">
-                      <FiEye className="mr-2" />
-                      <span>{article.views} مشاهدة</span>
+                    <div className="flex items-center bg-white/10 backdrop-blur-sm px-1.5 py-0.5 rounded-full">
+                      <FiEye className="mr-1 w-2.5 h-2.5" />
+                      <span>{getRandomInt(50000, 250000).toLocaleString()}</span>
                     </div>
                   </div>
                 </div>
               </div>
               
-              {/* Action Buttons */}
-              <div className="flex space-x-3">
+              {/* Enhanced Action Buttons */}
+              <div className="flex gap-x-2">
                 <button 
-                  className="p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 backdrop-blur-sm" 
+                  className="p-2 rounded-md bg-white/15 hover:bg-white/25 transition-all duration-300 backdrop-blur-xl border border-white/20 hover:border-white/40 shadow-lg hover:shadow-xl" 
                   aria-label="مشاركة المقال"
                 >
-                  <FiShare2 className="w-5 h-5" />
+                  <FiShare2 className="w-3.5 h-3.5" />
                 </button>
                 <button 
-                  className="p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 backdrop-blur-sm" 
+                  className="p-2 rounded-md bg-white/15 hover:bg-white/25 transition-all duration-300 backdrop-blur-xl border border-white/20 hover:border-white/40 shadow-lg hover:shadow-xl" 
                   aria-label="حفظ المقال"
                 >
-                  <FiBookmark className="w-5 h-5" />
+                  <FiBookmark className="w-3.5 h-3.5" />
                 </button>
                 <button 
-                  className="p-3 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-200 backdrop-blur-sm" 
+                  className="p-2 rounded-md bg-white/15 hover:bg-white/25 transition-all duration-300 backdrop-blur-xl border border-white/20 hover:border-white/40 shadow-lg hover:shadow-xl" 
                   aria-label="التعليق على المقال"
                 >
-                  <FiMessageCircle className="w-5 h-5" />
+                  <FiMessageCircle className="w-3.5 h-3.5" />
                 </button>
               </div>
             </div>
@@ -165,7 +199,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
       </div>
 
       {/* Featured Image */}
-      <div className="container -mt-16 relative z-10">
+      <div className="container -mt-8 md:-mt-10 relative z-10">
         <div className="max-w-5xl mx-auto">
           <div className="aspect-video relative rounded-2xl overflow-hidden shadow-2xl">
             <Image
@@ -190,7 +224,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
             {/* Main Content */}
             <div className="lg:col-span-3">
               <div 
-                className="prose prose-base max-w-none arabic-text
+                className="prose prose-base max-w-none arabic-text font-cairo
                   prose-headings:text-gray-900 prose-headings:font-semibold prose-headings:leading-snug
                   prose-h1:text-xl prose-h1:mb-4 prose-h1:mt-6 prose-h1:text-primary
                   prose-h2:text-lg prose-h2:mb-3 prose-h2:mt-6 prose-h2:border-b prose-h2:border-gray-200 prose-h2:pb-2 prose-h2:text-gray-800
@@ -212,10 +246,10 @@ export default function ArticlePage({ params }: ArticlePageProps) {
               {/* Article Tags */}
               {article.tags && article.tags.length > 0 && (
                 <div className="mt-12 pt-8 border-t border-gray-200">
-                  <div className="flex items-center mb-4">
-                    <FiTag className="w-5 h-5 text-gray-500 mr-2" />
-                    <span className="text-gray-700 font-semibold">العلامات:</span>
-                  </div>
+                                  <div className="flex items-center mb-4">
+                  <FiTag className="w-5 h-5 text-gray-500 mr-2" />
+                  <span className="text-gray-700 font-semibold font-cairo">العلامات:</span>
+                </div>
                   <div className="flex flex-wrap gap-3">
                     {article.tags.map((tag) => (
                       <Link 
@@ -236,7 +270,7 @@ export default function ArticlePage({ params }: ArticlePageProps) {
               <div className="sticky top-8 space-y-8">
                 {/* Share Section */}
                 <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="font-bold text-lg mb-4 flex items-center">
+                  <h3 className="font-bold text-lg mb-4 flex items-center font-cairo">
                     <FiShare2 className="w-5 h-5 mr-2 text-primary" />
                     مشاركة المقال
                   </h3>
@@ -244,8 +278,10 @@ export default function ArticlePage({ params }: ArticlePageProps) {
                     <button className="w-full flex items-center justify-center py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
                       فيسبوك
                     </button>
-                    <button className="w-full flex items-center justify-center py-3 px-4 bg-sky-500 text-white rounded-lg hover:bg-sky-600 transition-colors">
-                      تويتر
+                    <button className="w-full flex items-center justify-center py-3 px-4 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors">
+                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                      </svg>
                     </button>
                     <button className="w-full flex items-center justify-center py-3 px-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
                       واتساب
@@ -255,11 +291,11 @@ export default function ArticlePage({ params }: ArticlePageProps) {
 
                 {/* Article Stats */}
                 <div className="bg-gradient-to-br from-primary/5 to-secondary/5 rounded-xl p-6 border border-primary/10">
-                  <h3 className="font-bold text-lg mb-4 text-gray-900">إحصائيات المقال</h3>
+                  <h3 className="font-bold text-lg mb-4 text-gray-900 font-cairo">إحصائيات المقال</h3>
                   <div className="space-y-4">
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600">المشاهدات</span>
-                      <span className="font-semibold text-primary">{article.views}</span>
+                      <span className="font-semibold text-primary">{getRandomInt(50000, 250000).toLocaleString()}</span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600">وقت القراءة</span>
@@ -279,13 +315,13 @@ export default function ArticlePage({ params }: ArticlePageProps) {
           <div className="mt-16 bg-gradient-to-r from-gray-50 to-gray-100 rounded-2xl p-8 border border-gray-200">
             <div className="flex items-start space-x-6">
               <div className="w-20 h-20 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg flex-shrink-0">
-                {getSafeAuthorInfo(article.author).initials}
+                DN
               </div>
               <div className="flex-1">
-                <div className="flex items-center mb-3">
-                  <FiUser className="w-5 h-5 text-primary mr-2" />
-                  <h3 className="font-bold text-xl text-gray-900">عن الكاتب: {getSafeAuthorInfo(article.author).name}</h3>
-                </div>
+                                  <div className="flex items-center mb-3">
+                    <FiUser className="w-5 h-5 text-primary mr-2" />
+                    <h3 className="font-bold text-xl text-gray-900 font-cairo">عن الكاتب: DeepNews</h3>
+                  </div>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   {article.author?.bio || 'كاتب وصحفي متمرس يغطي أحدث الأخبار والاتجاهات في مجال تخصصه.'}
                 </p>

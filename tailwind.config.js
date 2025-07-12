@@ -53,8 +53,10 @@ module.exports = {
         light: '#edf2f4',
       },
       fontFamily: {
-        sans: ['Noto Sans Arabic', 'system-ui', 'sans-serif'],
-        serif: ['Noto Sans Arabic', 'Georgia', 'serif'],
+        sans: ['Cairo', 'Tajawal', 'Noto Naskh Arabic', 'system-ui', 'sans-serif'],
+        serif: ['Cairo', 'Tajawal', 'Georgia', 'serif'],
+        arabic: ['Cairo', 'Tajawal', 'Noto Naskh Arabic', 'system-ui', 'sans-serif'],
+        heading: ['Cairo', 'Tajawal', 'system-ui', 'sans-serif'],
       },
       spacing: {
         '18': '4.5rem',

@@ -126,15 +126,15 @@ export function getPlaceholderImage(
 export function getSafeAuthorInfo(author: any) {
   if (!author) {
     return {
-      name: 'Anonymous',
-      initials: 'AN',
-      email: 'anonymous@newssite.com'
+      name: 'DeepNews',
+      initials: 'DN',
+      email: 'contact@deepnews.com'
     };
   }
   
   return {
-    name: author.name || 'Anonymous',
-    initials: author.initials || author.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) || 'AN',
-    email: author.email || 'anonymous@newssite.com'
+    name: author.name || 'DeepNews',
+    initials: author.initials || author.name?.split(' ').map((n: string) => n[0]).join('').toUpperCase().slice(0, 2) || 'DN',
+    email: author.email || 'contact@deepnews.com'
   };
 } 

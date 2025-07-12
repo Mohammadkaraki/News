@@ -17,6 +17,11 @@ interface ArticleCardProps {
   showStats?: boolean;
 }
 
+// Helper for random large numbers
+function getRandomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export default function ArticleCard({ 
   article, 
   size = 'medium',
@@ -75,9 +80,9 @@ export default function ArticleCard({
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 <div className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white text-sm font-bold mr-2 border-2 border-white/30">
-                  {getSafeAuthorInfo(article.author).initials}
+                  DN
                 </div>
-                <span className="text-sm text-white/90">{getSafeAuthorInfo(article.author).name}</span>
+                <span className="text-sm text-white/90">DeepNews</span>
               </div>
               
               <div className="flex items-center space-x-4">
@@ -89,7 +94,7 @@ export default function ArticleCard({
                     </div>
                     <div className="flex items-center text-white/80 text-sm">
                       <FiEye className="w-4 h-4 mr-1" />
-                      <span>{article.views || 0}</span>
+                      <span>{getRandomInt(50000, 250000).toLocaleString()}</span>
                     </div>
                   </>
                 )}
@@ -100,7 +105,7 @@ export default function ArticleCard({
                   aria-label="Like article"
                 >
                   <FiHeart className="w-4 h-4 mr-1" />
-                  <span>{likes || 0}</span>
+                  <span>{getRandomInt(5000, 50000).toLocaleString()}</span>
                 </button>
               </div>
             </div>
@@ -146,9 +151,9 @@ export default function ArticleCard({
         <div className="mt-auto pt-3 border-t border-gray-100 flex items-center justify-between">
           <div className="flex items-center">
             <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">
-              {getSafeAuthorInfo(article.author).initials}
+              DN
             </div>
-            <span className="text-xs font-medium text-gray-700">{getSafeAuthorInfo(article.author).name}</span>
+            <span className="text-xs font-medium text-gray-700">DeepNews</span>
           </div>
           
           <div className="flex items-center space-x-3">
@@ -160,7 +165,7 @@ export default function ArticleCard({
                 </div>
                 <div className="flex items-center text-gray-500 text-xs">
                   <FiEye className="w-3 h-3 mr-1" />
-                  <span>{article.views || 0}</span>
+                  <span>{getRandomInt(50000, 250000).toLocaleString()}</span>
                 </div>
               </>
             )}
@@ -171,7 +176,7 @@ export default function ArticleCard({
               aria-label="Like article"
             >
               <FiHeart className="w-3 h-3 mr-1" />
-              <span>{likes || 0}</span>
+              <span>{getRandomInt(5000, 50000).toLocaleString()}</span>
             </button>
           </div>
         </div>

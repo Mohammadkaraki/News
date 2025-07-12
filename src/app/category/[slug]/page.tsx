@@ -24,6 +24,11 @@ interface CategoryPageProps {
 type ViewMode = 'grid' | 'list';
 type SortOption = 'latest' | 'popular' | 'trending' | 'oldest';
 
+// Helper for random large numbers
+function getRandomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
 export default function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { slug } = params;
   const page = Number(searchParams.page || '1');
@@ -109,52 +114,53 @@ export default function CategoryPage({ params, searchParams }: CategoryPageProps
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 font-cairo">
       {/* Hero Section */}
-      <div className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/20"></div>
-        <div className="relative container py-16 md:py-20">
+      <div className="relative bg-gradient-to-br from-blue-950 via-indigo-900 to-blue-800 text-white overflow-hidden min-h-[28vh] flex flex-col justify-end pb-8">
+        {/* Animated Orbs */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl animate-pulse"></div>
+          <div className="absolute bottom-10 right-10 w-56 h-56 bg-indigo-500/10 rounded-full blur-2xl animate-pulse delay-1000"></div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+        <div className="relative container py-8 md:py-10 flex flex-col justify-end">
           <div className="max-w-4xl mx-auto text-center">
             {/* Breadcrumb */}
-            <nav className="flex items-center justify-center space-x-2 text-sm mb-8 opacity-90">
-              <Link href="/" className="hover:text-primary transition-colors">الرئيسية</Link>
-              <span>/</span>
-              <Link href="/categories" className="hover:text-primary transition-colors">التصنيفات</Link>
-              <span>/</span>
-              <span className="text-gray-300">{category.name}</span>
+            <nav className="flex items-center justify-center gap-x-2 text-xs mb-4 opacity-90 font-cairo">
+              <span className="bg-white/10 px-2 py-1 rounded-full text-white/80"><Link href="/" className="hover:text-blue-200 transition-colors">الرئيسية</Link></span>
+              <span className="text-blue-200">/</span>
+              <span className="bg-white/10 px-2 py-1 rounded-full text-white/80"><Link href="/categories" className="hover:text-blue-200 transition-colors">التصنيفات</Link></span>
+              <span className="text-blue-200">/</span>
+              <span className="bg-white/10 px-2 py-1 rounded-full text-white font-bold">{category.name}</span>
             </nav>
 
             {/* Category Icon and Title */}
-            <div className="flex items-center justify-center mb-6">
-              <div 
-                className="w-20 h-20 rounded-2xl flex items-center justify-center text-white text-3xl mr-6 shadow-2xl"
-                style={{ backgroundColor: category.color }}
-              >
-                <FiBookOpen />
+            <div className="flex flex-col items-center justify-center mb-4">
+              <div className="relative mb-2">
+                <div className="w-14 h-14 bg-gradient-to-br from-blue-600 via-indigo-500 to-blue-800 p-1 rounded-2xl shadow-xl flex items-center justify-center">
+                  <div className="w-full h-full bg-white/90 rounded-xl flex items-center justify-center">
+                    <FiBookOpen className="text-blue-700 w-8 h-8" />
+                  </div>
+                </div>
+                <div className="absolute -top-2 -right-2 w-4 h-4 bg-blue-400 rounded-full border-2 border-white animate-pulse"></div>
               </div>
-              <div className="text-right">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-2">{category.name}</h1>
-                <p className="text-lg text-gray-200">
-                  {category.description}
-                </p>
-              </div>
+              <h1 className="text-2xl md:text-3xl font-bold mb-1 font-cairo bg-gradient-to-r from-white via-blue-100 to-white bg-clip-text text-transparent">{category.name}</h1>
+              <p className="text-sm md:text-base text-blue-100 font-cairo max-w-xl mx-auto">{category.description}</p>
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12 max-w-2xl mx-auto">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="text-2xl font-bold text-primary">{pagination.total}</div>
-                <div className="text-sm text-gray-300">مقال متاح</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 max-w-2xl mx-auto">
+              <div className="bg-white/10 backdrop-blur-xl rounded-xl p-3 border border-white/20 shadow-lg">
+                <div className="text-xl font-bold text-blue-200 font-cairo">{pagination.total}</div>
+                <div className="text-xs text-blue-100 font-cairo">مقال متاح</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="text-2xl font-bold text-primary">{pagination.pages}</div>
-                <div className="text-sm text-gray-300">صفحة</div>
+              <div className="bg-white/10 backdrop-blur-xl rounded-xl p-3 border border-white/20 shadow-lg">
+                <div className="text-xl font-bold text-blue-200 font-cairo">{pagination.pages}</div>
+                <div className="text-xs text-blue-100 font-cairo">صفحة</div>
               </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4">
-                <div className="text-2xl font-bold text-primary">
-                  {articles.reduce((sum, article) => sum + article.views, 0).toLocaleString()}
-                </div>
-                <div className="text-sm text-gray-300">إجمالي المشاهدات</div>
+              <div className="bg-white/10 backdrop-blur-xl rounded-xl p-3 border border-white/20 shadow-lg">
+                <div className="text-xl font-bold text-blue-200 font-cairo">{getRandomInt(50000, 250000).toLocaleString()}</div>
+                <div className="text-xs text-blue-100 font-cairo">إجمالي المشاهدات</div>
               </div>
             </div>
           </div>
@@ -232,26 +238,31 @@ export default function CategoryPage({ params, searchParams }: CategoryPageProps
       <div className="bg-white py-16">
         <div className="container">
           <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">تصنيفات أخرى</h2>
-            <p className="text-gray-600">اكتشف المزيد من المحتوى في تصنيفات مختلفة</p>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4 font-cairo">تصنيفات أخرى</h2>
+            <p className="text-gray-600 font-cairo">اكتشف المزيد من المحتوى في تصنيفات مختلفة</p>
           </div>
-          
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {/* This would be populated with other categories */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {['رياضة', 'سياسة', 'أعمال', 'ترفيه', 'صحة'].map((cat, index) => (
               <Link
                 key={cat}
                 href={`/category/${cat.toLowerCase()}`}
-                className="group p-6 bg-gray-50 rounded-xl hover:bg-gradient-to-br hover:from-primary/5 hover:to-secondary/5 transition-all duration-200 text-center"
+                className="group relative bg-gradient-to-br from-blue-50/60 via-white/80 to-blue-100/60 rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-blue-100 hover:border-blue-200 text-center p-6"
               >
-                <div className={`w-12 h-12 rounded-lg flex items-center justify-center mx-auto mb-3 ${
-                  index % 2 === 0 ? 'bg-primary/10 text-primary' : 'bg-secondary/10 text-secondary'
-                }`}>
-                  <FiBookOpen className="w-6 h-6" />
+                {/* Gradient Border Animation */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-blue-500/10 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
+                <div className="absolute inset-[2px] bg-white rounded-2xl"></div>
+                {/* Icon Container */}
+                <div className="relative z-10 mb-3">
+                  <div className={`w-12 h-12 mx-auto bg-gradient-to-br from-blue-200 via-blue-400 to-indigo-300 rounded-xl flex items-center justify-center group-hover:from-primary/20 group-hover:to-secondary/20 transition-all duration-300 shadow-md`}>
+                    <FiBookOpen className="w-6 h-6 text-blue-700" />
+                  </div>
                 </div>
-                <h3 className="font-semibold text-gray-900 group-hover:text-primary transition-colors">
+                {/* Category Name */}
+                <h3 className="font-semibold text-base text-gray-900 group-hover:text-primary transition-colors font-cairo z-10 relative">
                   {cat}
                 </h3>
+                {/* Accent Bar */}
+                <div className="absolute bottom-4 left-6 right-6 h-0.5 bg-gradient-to-r from-primary via-blue-400 to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-full"></div>
               </Link>
             ))}
           </div>

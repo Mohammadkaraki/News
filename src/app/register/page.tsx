@@ -55,30 +55,34 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <Link href="/" className="flex justify-center">
-            <h1 className="text-3xl font-bold text-primary">
-              <span className="bg-primary text-white px-2 py-1 rounded-md mr-1">N</span>
-              ews
-            </h1>
+    <div className="min-h-screen flex items-start justify-center pt-10 bg-gradient-to-br from-blue-950 via-indigo-900 to-blue-800 font-cairo relative overflow-hidden" dir="rtl">
+      {/* Animated Orbs */}
+      <div className="absolute top-10 left-10 w-40 h-40 bg-blue-500/10 rounded-full blur-2xl animate-pulse"></div>
+      <div className="absolute bottom-10 right-10 w-56 h-56 bg-indigo-500/10 rounded-full blur-2xl animate-pulse delay-1000"></div>
+      <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent"></div>
+      <div className="relative max-w-md w-full space-y-8 z-10">
+        <div className="flex flex-col items-center justify-center">
+          <Link href="/" className="flex items-center justify-center mb-2">
+            <div className="bg-gradient-to-br from-blue-600 via-indigo-500 to-blue-800 p-1 rounded-xl shadow-lg">
+              <div className="bg-white rounded-lg px-4 py-2 flex items-center gap-2">
+                <h1 className="text-xl font-bold bg-gradient-to-r from-primary via-blue-600 to-secondary bg-clip-text text-transparent leading-tight">DeepNews</h1>
+              </div>
+            </div>
           </Link>
-          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
-            Create your account
-          </h2>
-          <p className="mt-2 text-center text-sm text-gray-600">
-            Or{' '}
-            <Link href="/login" className="font-medium text-primary hover:text-primary-700">
-              sign in to existing account
+          <h2 className="mt-4 text-center text-2xl font-bold text-white drop-shadow-lg">إنشاء حساب جديد</h2>
+          <p className="mt-2 text-center text-sm text-blue-100">
+            أو
+            <Link href="/login" className="font-medium text-blue-200 hover:text-white transition-colors ml-1">
+              تسجيل الدخول إلى حسابك
             </Link>
           </p>
         </div>
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+        <form className="mt-8 space-y-6 bg-white/80 backdrop-blur-xl rounded-2xl border border-blue-100 shadow-2xl p-8" onSubmit={handleSubmit}>
+          <div className="w-16 h-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-blue-700 rounded-full mx-auto mb-6"></div>
           <div className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">
-                Full Name
+                الاسم الكامل
               </label>
               <input
                 id="name"
@@ -88,13 +92,13 @@ export default function RegisterPage() {
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                placeholder="Enter your full name"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-blue-200 placeholder-blue-400 text-blue-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:z-10 sm:text-sm bg-white/80"
+                placeholder="أدخل اسمك الكامل"
               />
             </div>
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-                Email address
+                البريد الإلكتروني
               </label>
               <input
                 id="email"
@@ -104,13 +108,13 @@ export default function RegisterPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                placeholder="Enter your email"
+                className="mt-1 appearance-none relative block w-full px-3 py-2 border border-blue-200 placeholder-blue-400 text-blue-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:z-10 sm:text-sm bg-white/80"
+                placeholder="أدخل بريدك الإلكتروني"
               />
             </div>
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
-                Password
+                كلمة المرور
               </label>
               <div className="mt-1 relative">
                 <input
@@ -121,12 +125,12 @@ export default function RegisterPage() {
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                  placeholder="Enter your password (min 6 characters)"
+                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-blue-200 placeholder-blue-400 text-blue-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:z-10 sm:text-sm bg-white/80"
+                  placeholder="أدخل كلمة المرور (6 أحرف على الأقل)"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 left-0 pl-3 flex items-center"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
@@ -139,7 +143,7 @@ export default function RegisterPage() {
             </div>
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">
-                Confirm Password
+                تأكيد كلمة المرور
               </label>
               <div className="mt-1 relative">
                 <input
@@ -150,12 +154,12 @@ export default function RegisterPage() {
                   required
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
-                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-lg focus:outline-none focus:ring-primary focus:border-primary focus:z-10 sm:text-sm"
-                  placeholder="Confirm your password"
+                  className="appearance-none relative block w-full px-3 py-2 pr-10 border border-blue-200 placeholder-blue-400 text-blue-900 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 focus:z-10 sm:text-sm bg-white/80"
+                  placeholder="أعد إدخال كلمة المرور"
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  className="absolute inset-y-0 left-0 pl-3 flex items-center"
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
@@ -172,21 +176,21 @@ export default function RegisterPage() {
             <button
               type="submit"
               disabled={loading}
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary disabled:opacity-50 disabled:cursor-not-allowed"
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-bold rounded-xl text-white bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-900 hover:from-blue-800 hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed shadow-md transition-all"
             >
               {loading ? (
                 <FiLoader className="w-5 h-5 animate-spin" />
               ) : (
-                'Create Account'
+                'إنشاء حساب'
               )}
             </button>
           </div>
 
           {/* Note for testing */}
-          <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <h3 className="text-sm font-medium text-yellow-800 mb-2">Note:</h3>
+          <div className="mt-6 p-4 bg-yellow-50/80 border border-yellow-200 rounded-lg">
+            <h3 className="text-sm font-medium text-yellow-800 mb-2">ملاحظة:</h3>
             <p className="text-xs text-yellow-600">
-              New users will have 'user' role by default. For admin access, use the test credentials on the login page.
+              المستخدمون الجدد سيحصلون على دور "مستخدم" بشكل افتراضي. للوصول كمدير، استخدم بيانات الدخول التجريبية في صفحة تسجيل الدخول.
             </p>
           </div>
         </form>

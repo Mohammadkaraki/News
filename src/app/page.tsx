@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { FiChevronRight, FiLoader, FiWifi, FiWifiOff } from 'react-icons/fi';
+import { FiChevronRight, FiLoader, FiTrendingUp, FiClock, FiEye } from 'react-icons/fi';
 
 import ArticleCard from '@/components/ArticleCard';
 import SectionHeader from '@/components/SectionHeader';
@@ -12,6 +12,11 @@ import { articleApi, categoryApi } from '@/lib/api';
 import { getSafeImageProps, getSafeAuthorInfo } from '@/lib/imageUtils';
 import { useRealTimeUpdates } from '@/hooks/useRealTimeUpdates';
 import type { Article, Category } from '@/types/api';
+
+// Helper for random large numbers
+function getRandomInt(min: number, max: number): number {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 export default function HomePage() {
   const [featuredArticles, setFeaturedArticles] = useState<Article[]>([]);
@@ -61,7 +66,7 @@ export default function HomePage() {
   }, []);
 
   // Initialize real-time updates
-  const { isConnected } = useRealTimeUpdates({
+  const { } = useRealTimeUpdates({
     onNewArticle: handleNewArticle,
     onError: (error) => {
       console.error('WebSocket error:', error);
@@ -75,7 +80,7 @@ export default function HomePage() {
         setLoading(true);
         setError(null);
 
-                // Fetch categories first to get their slugs
+        // Fetch categories first to get their slugs
         const categoriesResponse = await categoryApi.getCategories();
         let worldSlug = '';
         let politicsSlug = '';
@@ -164,7 +169,6 @@ export default function HomePage() {
         }
 
         // Set featured articles as combination of world and politics articles
-        // We need to get the articles from the responses first
         let worldArticlesData: Article[] = [];
         let politicsArticlesData: Article[] = [];
         
@@ -202,7 +206,7 @@ export default function HomePage() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <FiLoader className="w-8 h-8 animate-spin mx-auto mb-4 text-primary" />
-          <p className="text-gray-600">Loading latest news...</p>
+          <p className="text-gray-600 font-arabic">جاري تحميل أحدث الأخبار...</p>
         </div>
       </div>
     );
@@ -212,12 +216,12 @@ export default function HomePage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center max-w-md">
-          <p className="text-red-600 mb-4">{error}</p>
+          <p className="text-red-600 mb-4 font-arabic">{error}</p>
           <button
             onClick={() => window.location.reload()}
-            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors font-arabic"
           >
-            Retry
+            إعادة المحاولة
           </button>
         </div>
       </div>
@@ -229,17 +233,7 @@ export default function HomePage() {
 
   return (
     <div className="pb-16">
-      {/* Real-time Connection Status */}
-      <div className="fixed top-4 left-4 z-50">
-        <div className={`flex items-center gap-2 px-3 py-2 rounded-full text-sm font-medium transition-all duration-300 ${
-          isConnected 
-            ? 'bg-green-100 text-green-800 border border-green-200' 
-            : 'bg-red-100 text-red-800 border border-red-200'
-        }`}>
-          {isConnected ? <FiWifi className="w-4 h-4" /> : <FiWifiOff className="w-4 h-4" />}
-          {isConnected ? 'متصل' : 'غير متصل'}
-        </div>
-      </div>
+
 
       {/* New Article Notification */}
       {newArticleNotification && (
@@ -249,7 +243,7 @@ export default function HomePage() {
               <div className="w-2 h-2 bg-primary rounded-full mt-2 animate-pulse"></div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="text-primary font-semibold text-sm">مقال جديد</span>
+                  <span className="text-primary font-semibold text-sm font-heading">مقال جديد</span>
                   <CategoryBadge category={newArticleNotification.category} size="sm" />
                 </div>
                 <Link 
@@ -257,10 +251,10 @@ export default function HomePage() {
                   className="block"
                   onClick={() => setNewArticleNotification(null)}
                 >
-                  <h4 className="font-semibold text-gray-900 text-sm line-clamp-2 hover:text-primary transition-colors">
+                  <h4 className="font-semibold text-gray-900 text-sm line-clamp-2 hover:text-primary transition-colors font-heading">
                     {newArticleNotification.title}
                   </h4>
-                  <p className="text-gray-600 text-xs mt-1 line-clamp-1">
+                  <p className="text-gray-600 text-xs mt-1 line-clamp-1 font-arabic">
                     {newArticleNotification.excerpt}
                   </p>
                 </Link>
@@ -277,180 +271,370 @@ export default function HomePage() {
         </div>
       )}
 
-      {/* Enhanced Hero Section */}
-      <section className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
-        {/* Background Pattern */}
+      {/* Spectacular Hero Section */}
+      <section className="relative h-[30vh] min-h-[240px] max-h-[350px] overflow-hidden">
+        {/* Dynamic Background System */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-950 via-indigo-900 via-blue-800 to-slate-900"></div>
+        <div className="absolute inset-0 bg-gradient-to-tr from-blue-600/15 via-transparent to-indigo-600/20"></div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-500/10 via-transparent to-transparent"></div>
+        
+        {/* Animated Mesh Grid */}
         <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), 
-                             radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.3) 0%, transparent 50%)`
-          }}></div>
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_110%)]"></div>
         </div>
         
-        {/* Animated Background Elements */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        </div>
+                 {/* Spectacular Animated Elements */}
+         <div className="absolute inset-0 overflow-hidden">
+           {/* Main Orbs */}
+           <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-gradient-to-br from-blue-500/25 via-indigo-600/15 to-blue-700/20 rounded-full blur-3xl animate-pulse opacity-80"></div>
+           <div className="absolute -bottom-40 -left-40 w-[400px] h-[400px] bg-gradient-to-tr from-blue-600/15 via-indigo-600/20 to-blue-800/15 rounded-full blur-3xl animate-pulse delay-1000 opacity-70"></div>
+           
+           {/* Secondary Orbs */}
+           <div className="absolute top-1/4 left-1/3 w-48 h-48 bg-gradient-to-r from-blue-500/20 to-indigo-600/20 rounded-full blur-2xl animate-pulse delay-500"></div>
+           <div className="absolute bottom-1/3 right-1/4 w-36 h-36 bg-gradient-to-r from-blue-400/15 to-indigo-500/15 rounded-full blur-xl animate-pulse delay-2000"></div>
+           
+           {/* Floating Particles */}
+           <div className="absolute top-20 left-1/5 w-4 h-4 bg-blue-400/60 rounded-full animate-bounce opacity-80 delay-300"></div>
+           <div className="absolute top-32 right-1/3 w-3 h-3 bg-indigo-400/50 rounded-full animate-bounce opacity-70 delay-700"></div>
+           <div className="absolute bottom-32 left-1/4 w-2 h-2 bg-blue-300/60 rounded-full animate-bounce opacity-60 delay-1100"></div>
+           <div className="absolute bottom-40 right-1/5 w-3.5 h-3.5 bg-blue-500/50 rounded-full animate-bounce opacity-50 delay-1500"></div>
+         </div>
         
-        <div className="relative container py-12 md:py-16">
-          <div className="text-center max-w-4xl mx-auto mb-8">
-            {/* Welcome Badge */}
-            <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-sm font-medium mb-6 border border-white/20">
-              <span className="ml-2">🌟</span>
-              مرحباً بكم في موقع الأخبار
-              <span className="mr-2">📰</span>
-            </div>
-            
-            {/* Main Headline */}
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 leading-tight">
-              <span className="block mb-2">اصنع قصصاً</span>
-              <span className="block mb-2">
-                تشعل <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">الإلهام</span>
-              </span>
-              <span className="block text-2xl md:text-3xl lg:text-4xl text-gray-300">
-                المعرفة والترفيه
-              </span>
-            </h1>
-            
-            {/* Subtitle */}
-            <p className="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl mx-auto leading-relaxed">
-              اكتشف أحدث الأخبار والقصص المثيرة من حول العالم في مكان واحد
-            </p>
-            
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
-              <Link 
-                href="/articles"
-                className="group px-6 py-3 bg-gradient-to-r from-primary to-secondary text-white rounded-full font-semibold hover:shadow-2xl hover:shadow-primary/25 transition-all duration-300 transform hover:scale-105"
-              >
-                <span className="flex items-center">
-                  استكشف الأخبار
-                  <FiChevronRight className="mr-2 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </Link>
-              <Link 
-                href="/categories"
-                className="px-6 py-3 bg-white/10 backdrop-blur-sm text-white rounded-full font-semibold border border-white/20 hover:bg-white/20 transition-all duration-300"
-              >
-                تصفح التصنيفات
-              </Link>
-            </div>
-            
-            {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-xl mx-auto">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">500+</div>
-                <div className="text-gray-400 text-xs">مقال يومياً</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">50K+</div>
-                <div className="text-gray-400 text-xs">قارئ نشط</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">24/7</div>
-                <div className="text-gray-400 text-xs">تغطية مباشرة</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary mb-1">6</div>
-                <div className="text-gray-400 text-xs">تصنيف رئيسي</div>
-              </div>
-            </div>
-          </div>
-        </div>
+                 {/* Content Container */}
+         <div className="relative container h-full flex items-center py-4">
+           <div className="w-full">
+             <div className="grid lg:grid-cols-12 gap-6 items-center">
+               {/* Main Content */}
+               <div className="lg:col-span-7">
+                 {/* Premium Badge */}
+                 <div className="inline-flex items-center px-3 py-1.5 bg-gradient-to-r from-blue-500/20 via-indigo-500/15 to-blue-600/20 backdrop-blur-xl rounded-full text-xs font-medium mb-3 border border-blue-400/30 shadow-2xl shadow-blue-500/20">
+                   <div className="relative mr-2">
+                     <div className="w-1.5 h-1.5 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full animate-pulse"></div>
+                     <div className="absolute inset-0 w-1.5 h-1.5 bg-gradient-to-r from-blue-400 to-indigo-400 rounded-full animate-ping opacity-75"></div>
+                   </div>
+                   <span className="font-heading bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent">
+                     🏆 المصدر الأول للأخبار العربية
+                   </span>
+                 </div>
+                 
+                 {/* Main Headline */}
+                 <h1 className="text-xl md:text-2xl lg:text-3xl font-bold mb-2 leading-tight font-heading">
+                   <span className="bg-gradient-to-r from-white via-gray-50 to-white bg-clip-text text-transparent drop-shadow-2xl">
+                     أحدث الأخبار من
+                   </span>
+                   <span className="bg-gradient-to-r from-blue-300 via-indigo-300 via-blue-400 to-blue-300 bg-clip-text text-transparent animate-pulse">
+                     {' '}جميع أنحاء العالم
+                   </span>
+                 </h1>
+                 
+                 {/* Description */}
+                 <p className="text-sm md:text-base text-blue-100 mb-4 max-w-lg font-arabic leading-relaxed opacity-95">
+                   تغطية شاملة وحصرية للأخبار العالمية مع
+                   <span className="text-blue-300 font-semibold"> تحديثات لحظية</span> 
+                   و
+                   <span className="text-indigo-300 font-semibold"> تحليل عميق</span>
+                 </p>
+                 
+                 {/* CTA Buttons */}
+                 <div className="flex flex-wrap gap-3 mb-3">
+                   <button 
+                     onClick={() => {
+                       const featuredSection = document.getElementById('featured-articles-section');
+                       if (featuredSection) {
+                         featuredSection.scrollIntoView({ behavior: 'smooth' });
+                       }
+                     }}
+                     className="group relative inline-flex items-center px-5 py-2.5 bg-gradient-to-r from-primary via-pink-600 to-secondary text-white rounded-xl font-semibold text-sm hover:shadow-xl hover:shadow-primary/30 transition-all duration-300 transform hover:scale-105 font-arabic overflow-hidden"
+                   >
+                     <div className="absolute inset-0 bg-gradient-to-r from-primary-600 via-pink-700 to-secondary-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                     <span className="relative">اكتشف الأخبار</span>
+                     <FiChevronRight className="relative mr-2 w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                   </button>
+                   <button 
+                     onClick={() => {
+                       // Dispatch custom event to open search
+                       window.dispatchEvent(new CustomEvent('openSearch'));
+                     }}
+                     className="group inline-flex items-center px-5 py-2.5 bg-white/10 backdrop-blur-xl text-white rounded-xl font-semibold text-sm border border-white/30 hover:bg-white/20 hover:border-white/50 transition-all duration-300 font-arabic"
+                   >
+                     <span>البحث</span>
+                     <svg className="mr-2 w-4 h-4 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                     </svg>
+                   </button>
+                 </div>
+                 
+
+               </div>
+               
+               {/* Enhanced Stats Panel */}
+               <div className="lg:col-span-5">
+                 <div className="bg-gradient-to-br from-white/10 via-white/20 to-white/10 backdrop-blur-3xl rounded-2xl p-4 border border-white/20 shadow-2xl shadow-black/30">
+                   <div className="text-center mb-3">
+                     <h3 className="text-sm font-bold text-white mb-1 font-heading">إحصائيات حية</h3>
+                     <div className="w-12 h-0.5 bg-gradient-to-r from-blue-400 to-indigo-400 mx-auto rounded-full"></div>
+                   </div>
+                   
+                                        <div className="grid grid-cols-2 gap-3">
+                       <div className="group relative bg-gradient-to-br from-white/15 to-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/30 hover:border-blue-400/60 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                         <div className="absolute inset-0 bg-gradient-to-r from-blue-500/15 via-indigo-500/10 to-blue-600/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                         <div className="relative text-center">
+                           <div className="text-xl font-black bg-gradient-to-r from-blue-200 via-indigo-200 to-blue-100 bg-clip-text text-transparent mb-1 drop-shadow-sm">750+</div>
+                           <div className="text-xs font-bold text-blue-200 font-arabic">مقال يومياً</div>
+                         </div>
+                       </div>
+                       
+                       <div className="group relative bg-gradient-to-br from-white/15 to-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/30 hover:border-indigo-400/60 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                         <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/15 via-blue-500/10 to-indigo-600/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                         <div className="relative text-center">
+                           <div className="text-xl font-black bg-gradient-to-r from-blue-200 via-indigo-200 to-blue-100 bg-clip-text text-transparent mb-1 drop-shadow-sm">500K+</div>
+                           <div className="text-xs font-bold text-blue-200 font-arabic">قارئ شهرياً</div>
+                         </div>
+                       </div>
+                       
+                       <div className="group relative bg-gradient-to-br from-white/15 to-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/30 hover:border-blue-300/60 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                         <div className="absolute inset-0 bg-gradient-to-r from-blue-400/15 via-blue-500/10 to-blue-400/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                         <div className="relative text-center">
+                           <div className="text-xl font-black bg-gradient-to-r from-blue-200 via-indigo-200 to-blue-100 bg-clip-text text-transparent mb-1 drop-shadow-sm">24/7</div>
+                           <div className="text-xs font-bold text-blue-200 font-arabic">تغطية مباشرة</div>
+                         </div>
+                       </div>
+                       
+                       <div className="group relative bg-gradient-to-br from-white/15 to-white/10 backdrop-blur-md rounded-xl p-2.5 border border-white/30 hover:border-indigo-300/60 transition-all duration-300 transform hover:scale-105 cursor-pointer">
+                         <div className="absolute inset-0 bg-gradient-to-r from-indigo-400/15 via-indigo-500/10 to-indigo-400/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                         <div className="relative text-center">
+                           <div className="text-xl font-black bg-gradient-to-r from-blue-200 via-indigo-200 to-blue-100 bg-clip-text text-transparent mb-1 drop-shadow-sm">15</div>
+                           <div className="text-xs font-bold text-blue-200 font-arabic">قسم إخباري</div>
+                         </div>
+                       </div>
+                     </div>
+                 </div>
+               </div>
+             </div>
+           </div>
+         </div>
         
-        {/* Bottom Wave */}
-        <div className="absolute bottom-0 left-0 right-0">
-          <svg viewBox="0 0 1200 120" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-12 md:h-20">
-            <path d="M0,60 C300,120 900,0 1200,60 L1200,120 L0,120 Z" fill="rgb(249, 250, 251)" />
-          </svg>
-        </div>
+                 {/* Spectacular Bottom Effect */}
+         <div className="absolute bottom-0 left-0 right-0">
+           <div className="h-2 bg-gradient-to-r from-blue-500/70 via-indigo-500/80 via-blue-600/70 to-blue-500/70 bg-[length:200%_100%] animate-pulse"></div>
+           <div className="h-px bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
+           <div className="h-px bg-gradient-to-r from-transparent via-blue-400/40 to-transparent"></div>
+         </div>
+        
+        
       </section>
       
-      {/* Featured Articles Section */}
-      <section className="bg-gray-50 py-16 -mt-1">
-        <div className="container">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">الأخبار المميزة</h2>
-            <p className="text-xl text-gray-600">أهم القصص والأحداث التي تشكل عالمنا اليوم</p>
+      {/* Compact Enhanced Featured Articles Section */}
+      <section id="featured-articles-section" className="relative bg-gradient-to-br from-slate-50 via-white to-blue-50/30 py-6 -mt-1 overflow-hidden">
+        {/* Subtle Background Pattern */}
+        <div className="absolute inset-0 opacity-[0.02]">
+          <div className="absolute top-8 right-8 w-48 h-48 bg-primary rounded-full blur-3xl"></div>
+          <div className="absolute bottom-8 left-8 w-40 h-40 bg-secondary rounded-full blur-3xl"></div>
+        </div>
+        
+        <div className="container relative">
+          {/* Compact Enhanced Header */}
+          <div className="text-center mb-6">
+            <div className="inline-flex items-center px-3 py-1.5 bg-white/60 backdrop-blur-sm rounded-full border border-primary/10 mb-3">
+              <span className="w-1.5 h-1.5 bg-primary rounded-full mr-2 animate-pulse"></span>
+              <span className="text-primary font-semibold text-xs font-heading">مختارات المحررين</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 font-heading">
+              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
+                الأخبار المميزة
+              </span>
+            </h2>
+            <div className="flex items-center justify-center gap-1.5 mb-1">
+              <div className="w-6 h-0.5 bg-gradient-to-r from-transparent to-primary rounded-full"></div>
+              <div className="w-12 h-0.5 bg-gradient-to-r from-primary via-pink-500 to-secondary rounded-full"></div>
+              <div className="w-6 h-0.5 bg-gradient-to-l from-transparent to-secondary rounded-full"></div>
+            </div>
+            <p className="text-gray-600 max-w-md mx-auto text-center font-arabic text-sm">أهم القصص التي تشكل عالمنا اليوم</p>
           </div>
           
-          {/* Featured Articles */}
-          {mainFeatured && (
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Main Featured Article */}
-              <div className="rounded-lg overflow-hidden shadow-md">
-                <Link href={`/article/${mainFeatured.slug}`} className="block relative aspect-video">
-                  <Image
-                    {...getSafeImageProps(
-                      mainFeatured.image?.url || '',
-                      mainFeatured.image?.alt || mainFeatured.title,
-                      mainFeatured.category?.name
-                    )}
-                    fill
-                    className="object-cover"
-                  />
-                </Link>
-                <div className="p-6 bg-white">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <CategoryBadge category={mainFeatured.category} />
-                    <span className="text-gray-500 text-xs">• {mainFeatured.timeAgo}</span>
-                  </div>
-                  <Link href={`/article/${mainFeatured.slug}`}>
-                    <h3 className="text-xl font-bold mb-2 hover:text-primary transition-colors">
-                      {mainFeatured.title}
-                    </h3>
-                  </Link>
-                  <p className="text-gray-600 mb-4 line-clamp-2">{mainFeatured.excerpt}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">
-                        {mainFeatured.author?.initials || 'U'}
-                      </div>
-                      <span className="text-sm text-gray-700">{mainFeatured.author?.name || 'Unknown'}</span>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      <span>{mainFeatured.readTime || 1} min read • {mainFeatured.views || 0} views</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
+                     {/* Compact Featured Articles Grid */}
+           {mainFeatured && (
+             <div className="grid md:grid-cols-12 gap-6">
+               {/* Compact Main Featured Article - 8 columns */}
+               <div className="md:col-span-8">
+                 <article className="group relative bg-white/80 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-white/20">
+                   {/* Compact Image Container */}
+                   <Link href={`/article/${mainFeatured.slug}`} className="block relative aspect-[16/9] overflow-hidden">
+                     <Image
+                       {...getSafeImageProps(
+                         mainFeatured.image?.url || '',
+                         mainFeatured.image?.alt || mainFeatured.title,
+                         mainFeatured.category?.name
+                       )}
+                       fill
+                       className="object-cover group-hover:scale-105 transition-transform duration-500"
+                     />
+                     {/* Compact Overlay Effects */}
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-50 group-hover:opacity-70 transition-opacity duration-300"></div>
+                     <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-transparent to-secondary/15 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                     
+                     {/* Compact Breaking News Badge */}
+                     <div className="absolute top-3 right-3">
+                       <div className="bg-red-500 text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 animate-pulse">
+                         <div className="w-1 h-1 bg-white rounded-full animate-ping"></div>
+                         <span className="font-heading">عاجل</span>
+                       </div>
+                     </div>
+                   </Link>
+                   
+                   {/* Compact Content */}
+                   <div className="p-6">
+                     {/* Compact Meta Information */}
+                     <div className="flex items-center gap-3 mb-4">
+                       <CategoryBadge category={mainFeatured.category} />
+                       <div className="flex items-center gap-1.5 text-gray-500 text-sm font-arabic">
+                         <FiClock className="w-3.5 h-3.5" />
+                         <span>{mainFeatured.timeAgo}</span>
+                       </div>
+                       <div className="flex items-center gap-1.5 text-gray-500 text-sm">
+                         <FiEye className="w-3.5 h-3.5" />
+                         <span className="font-mono">{getRandomInt(50000, 250000).toLocaleString()}</span>
+                       </div>
+                     </div>
+                     
+                     {/* Compact Title */}
+                     <Link href={`/article/${mainFeatured.slug}`}>
+                       <h3 className="text-xl md:text-2xl font-bold mb-3 text-gray-900 group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary group-hover:bg-clip-text group-hover:text-transparent transition-all duration-300 line-clamp-2 font-heading leading-tight">
+                         {mainFeatured.title}
+                       </h3>
+                     </Link>
+                     
+                     {/* Compact Excerpt */}
+                     <p className="text-gray-600 mb-5 line-clamp-2 leading-relaxed font-arabic">
+                       {mainFeatured.excerpt}
+                     </p>
+                     
+                     {/* Compact Author & CTA Section */}
+                     <div className="flex items-center justify-between">
+                       {/* Compact Author Info */}
+                       <div className="flex items-center gap-3">
+                         <div className="relative">
+                           <div className="w-10 h-10 bg-gradient-to-br from-primary via-pink-500 to-secondary rounded-full flex items-center justify-center text-white font-bold text-sm shadow-md">
+                             DN
+                           </div>
+                           <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-green-400 rounded-full border border-white flex items-center justify-center">
+                             <div className="w-1 h-1 bg-white rounded-full"></div>
+                           </div>
+                         </div>
+                         <div>
+                           <span className="text-gray-900 font-semibold font-arabic block text-sm ml-3">DeepNews</span>
+                           <p className="text-gray-500 text-xs font-arabic">محرر أول</p>
+                         </div>
+                       </div>
+                       
+                       {/* Compact CTA Button */}
+                       <Link 
+                         href={`/article/${mainFeatured.slug}`}
+                         className="group/cta inline-flex items-center px-4 py-2 bg-gradient-to-r from-primary to-secondary text-white rounded-lg font-semibold hover:shadow-md hover:shadow-primary/20 transition-all duration-300 transform hover:scale-105 font-arabic text-sm"
+                       >
+                         <span>اقرأ المزيد</span>
+                         <FiChevronRight className="mr-1.5 w-3.5 h-3.5 group-hover/cta:translate-x-1 transition-transform" />
+                       </Link>
+                     </div>
+                   </div>
+                 </article>
+               </div>
               
-              {/* Side Featured Articles */}
-              <div className="space-y-4">
-                {sideFeatured.map((article) => (
-                  <div key={article.id} className="flex bg-white rounded-lg overflow-hidden shadow-md">
-                    <div className="w-1/3 relative aspect-square">
-                      <Link href={`/article/${article.slug}`} className="block h-full">
-                        <Image
-                          {...getSafeImageProps(
-                            article.image?.url || '',
-                            article.image?.alt || article.title,
-                            article.category?.name
-                          )}
-                          fill
-                          className="object-cover"
-                        />
-                      </Link>
-                    </div>
-                    <div className="w-2/3 p-4">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <CategoryBadge category={article.category} size="sm" />
-                        <span className="text-gray-500 text-xs">• {article.timeAgo}</span>
-                      </div>
-                      <Link href={`/article/${article.slug}`}>
-                        <h3 className="font-bold mb-2 line-clamp-2 hover:text-primary transition-colors">
-                          {article.title}
-                        </h3>
-                      </Link>
-                      <p className="text-gray-600 text-sm mb-2 line-clamp-2">{article.excerpt}</p>
-                      <div className="text-xs text-gray-500">
-                        <span>{article.readTime} min read • {article.views} views</span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+                             {/* Compact Side Featured Articles - 4 columns */}
+               <div className="md:col-span-4">
+                 <div className="sticky top-8">
+                   <div className="bg-gradient-to-br from-white/90 via-white/70 to-white/90 backdrop-blur-xl p-4 rounded-2xl border border-white/30 shadow-lg">
+                     {/* Compact Sidebar Header */}
+                     <div className="flex items-center gap-2.5 mb-4">
+                       <div className="p-1.5 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-lg">
+                         <FiTrendingUp className="w-4 h-4 text-primary" />
+                       </div>
+                       <div>
+                         <h4 className="text-base font-bold text-gray-900 font-heading">الأكثر قراءة</h4>
+                         <p className="text-xs text-gray-500 font-arabic">خلال الساعات الماضية</p>
+                       </div>
+                     </div>
+                     
+                     {/* Compact Trending Articles */}
+                     <div className="space-y-4">
+                       {sideFeatured.map((article, index) => (
+                         <article key={article.id} className="group">
+                           <div className="flex gap-3 p-2.5 rounded-xl hover:bg-white/60 transition-all duration-300 border border-transparent hover:border-primary/10">
+                             {/* Compact Article Number */}
+                             <div className="flex-shrink-0">
+                               <div className="relative w-8 h-8 bg-gradient-to-br from-primary to-secondary text-white rounded-lg flex items-center justify-center font-bold text-sm shadow-md group-hover:scale-105 transition-transform duration-300">
+                                 {index + 1}
+                                 <div className="absolute inset-0 bg-gradient-to-br from-primary-400 to-secondary-400 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                 <span className="relative">{index + 1}</span>
+                               </div>
+                             </div>
+                             
+                             {/* Compact Content */}
+                             <div className="flex-1 min-w-0">
+                               <div className="flex items-center gap-1.5 mb-1.5">
+                                 <CategoryBadge category={article.category} size="sm" />
+                                 <span className="text-gray-400 text-xs">•</span>
+                                 <span className="text-gray-500 text-xs font-arabic">{article.timeAgo}</span>
+                               </div>
+                               
+                               <Link href={`/article/${article.slug}`}>
+                                 <h5 className="font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors duration-200 mb-2 font-heading leading-snug text-sm">
+                                   {article.title}
+                                 </h5>
+                               </Link>
+                               
+                               <div className="flex items-center justify-between text-xs text-gray-500">
+                                 <div className="flex items-center gap-1">
+                                   <FiEye className="w-3 h-3" />
+                                   <span className="font-mono">{getRandomInt(50000, 250000).toLocaleString()}</span>
+                                 </div>
+                                 <div className="flex items-center gap-1">
+                                   <FiClock className="w-3 h-3" />
+                                   <span className="font-arabic">{article.readTime}د</span>
+                                 </div>
+                               </div>
+                             </div>
+                             
+                             {/* Compact Thumbnail */}
+                             <div className="flex-shrink-0">
+                               <Link href={`/article/${article.slug}`} className="block relative w-14 h-14 rounded-lg overflow-hidden shadow-sm group-hover:shadow-md transition-shadow duration-300">
+                                 <Image
+                                   {...getSafeImageProps(
+                                     article.image?.url || '',
+                                     article.image?.alt || article.title,
+                                     article.category?.name
+                                   )}
+                                   fill
+                                   className="object-cover group-hover:scale-110 transition-transform duration-300"
+                                 />
+                                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                               </Link>
+                             </div>
+                           </div>
+                           
+                           {/* Compact Divider */}
+                           {index < sideFeatured.length - 1 && (
+                             <div className="my-3">
+                               <div className="h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
+                             </div>
+                           )}
+                         </article>
+                       ))}
+                     </div>
+                     
+                     {/* Compact View All Link */}
+                     <div className="mt-4 pt-3 border-t border-gray-200">
+                       <Link 
+                         href="/articles" 
+                         className="group flex items-center justify-center gap-2 text-primary font-semibold hover:text-secondary transition-colors duration-300 font-arabic text-sm"
+                       >
+                         <span>عرض جميع الأخبار</span>
+                         <FiChevronRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                       </Link>
+                     </div>
+                   </div>
+                 </div>
+               </div>
             </div>
           )}
         </div>
@@ -458,26 +642,47 @@ export default function HomePage() {
 
       {/* Categories Section */}
       {categories.length > 0 && (
-        <section className="container mb-16">
+        <section className="container mb-16 pt-8">
           <SectionHeader 
             title="تصفح التصنيفات" 
             viewAllLink="/categories"
           />
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {categories.map((category) => (
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {categories.map((category, index) => (
               <Link
                 key={category.id}
                 href={`/category/${category.slug}`}
-                className="group p-4 rounded-lg border border-gray-200 hover:border-primary transition-colors text-center"
+                className="group relative bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100 hover:border-transparent"
               >
-                <div className="mb-2">
-                  <span className="text-2xl">{getCategoryIcon(category.icon)}</span>
+                {/* Gradient Border */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-pink-500/10 to-secondary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+                <div className="absolute inset-[1px] bg-white rounded-xl"></div>
+                
+                {/* Content */}
+                <div className="relative p-5 text-center">
+                  {/* Category Icon */}
+                  <div className="mb-3">
+                    <div className="w-12 h-12 mx-auto bg-gradient-to-br from-gray-50 to-gray-100 rounded-full flex items-center justify-center group-hover:from-primary/10 group-hover:to-secondary/10 transition-all duration-300">
+                      <span className="text-xl group-hover:scale-110 transition-transform duration-300">
+                        {getCategoryIcon(category.icon)}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  {/* Category Name */}
+                  <h3 className="font-semibold text-sm group-hover:text-primary transition-colors font-heading mb-1">
+                    {category.name}
+                  </h3>
+                  
+                  {/* Category Description */}
+                  <p className="text-xs text-gray-500 group-hover:text-gray-600 transition-colors font-arabic line-clamp-2">
+                    {category.description}
+                  </p>
+                  
+                  {/* Accent Bar */}
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-pink-500 to-secondary opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 </div>
-                <h3 className="font-semibold text-sm group-hover:text-primary transition-colors">
-                  {category.name}
-                </h3>
-                <p className="text-xs text-gray-500 mt-1">{category.description}</p>
               </Link>
             ))}
           </div>
@@ -485,13 +690,13 @@ export default function HomePage() {
       )}
 
       {/* World News Section */}
-      <section className="container mb-16">
+      <section className="container mb-10">
         <SectionHeader 
           title="عالم" 
           viewAllLink="/category/world"
         />
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
           {worldArticles.slice(0, 8).map((article) => (
             <ArticleCard 
               key={article.id} 
@@ -501,73 +706,14 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Brand Story Section */}
-      <section className="container mb-16">
-        <SectionHeader 
-          title="News Story" 
-          viewAllLink="#"
-        />
-        
-        <div className="bg-white rounded-lg shadow-sm p-8">
-          <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-9 gap-6 items-center opacity-60">
-            {/* Brand Logos */}
-            <div className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="w-12 h-12 bg-red-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">BBC</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">CNN</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="w-12 h-12 bg-orange-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">FOX</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="w-12 h-12 bg-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">NBC</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">AP</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="w-12 h-12 bg-gray-800 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">NYT</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">ABC</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="w-12 h-12 bg-red-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">CBS</span>
-              </div>
-            </div>
-            <div className="flex items-center justify-center p-4 grayscale hover:grayscale-0 transition-all duration-300">
-              <div className="w-12 h-12 bg-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xs">PBS</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Politics Section */}
-      <section className="container mb-16">
+      <section className="container mb-10">
         <SectionHeader 
           title="سياسة" 
           viewAllLink="/category/politics"
         />
         
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Main Featured Article - Takes 8 columns */}
           {politicsArticles.slice(0, 1).map((article) => (
             <div key={article.id} className="lg:col-span-8">
@@ -583,14 +729,11 @@ export default function HomePage() {
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
                     />
-                    {/* Overlay for better text readability */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
                   </Link>
-                  {/* Category Badge on Image */}
                   <div className="absolute top-6 left-6">
                     <CategoryBadge category={article.category} />
                   </div>
-                  {/* Featured Badge */}
                   <div className="absolute top-6 right-6">
                     <span className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center">
                       🔥 Must Read
@@ -598,40 +741,40 @@ export default function HomePage() {
                   </div>
                 </div>
                 
-                <div className="p-8">
-                  <div className="flex items-center space-x-2 mb-4">
-                    <span className="text-gray-500 text-sm">📅 {article.timeAgo}</span>
+                <div className="p-6">
+                  <div className="flex items-center space-x-2 mb-3">
+                    <span className="text-gray-500 text-sm font-arabic">📅 {article.timeAgo}</span>
                     <span className="text-gray-300">•</span>
-                    <span className="text-gray-500 text-sm">⏱️ {article.readTime} min read</span>
+                    <span className="text-gray-500 text-sm font-arabic">⏱️ {article.readTime} min read</span>
                     <span className="text-gray-300">•</span>
-                    <span className="text-gray-500 text-sm">👁️ {article.views || 0} views</span>
+                    <span className="text-gray-500 text-sm">👁️ {getRandomInt(50000, 250000).toLocaleString()} views</span>
                   </div>
                   
                   <Link href={`/article/${article.slug}`}>
-                    <h3 className="text-2xl lg:text-3xl font-bold mb-4 text-gray-900 hover:text-primary transition-colors line-clamp-2 group-hover:text-primary">
+                    <h3 className="text-xl lg:text-2xl font-bold mb-3 text-gray-900 hover:text-primary transition-colors line-clamp-2 group-hover:text-primary font-heading">
                       {article.title}
                     </h3>
                   </Link>
                   
-                  <p className="text-gray-600 text-lg mb-6 line-clamp-3 leading-relaxed">
+                  <p className="text-gray-600 mb-4 line-clamp-2 leading-relaxed font-arabic">
                     {article.excerpt}
                   </p>
                   
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
                       <div className="w-10 h-10 bg-gradient-to-r from-primary to-secondary rounded-full flex items-center justify-center text-white font-bold">
-                        {getSafeAuthorInfo(article.author).initials}
+                        DN
                       </div>
                       <div>
-                        <span className="text-gray-900 font-semibold">{getSafeAuthorInfo(article.author).name}</span>
-                        <p className="text-gray-500 text-sm">Senior Editor</p>
+                        <span className="text-gray-900 font-semibold font-arabic">DeepNews</span>
+                        <p className="text-gray-500 text-sm font-arabic">محرر أول</p>
                       </div>
                     </div>
                     <Link 
                       href={`/article/${article.slug}`}
-                      className="inline-flex items-center text-primary font-semibold hover:text-primary/80 transition-colors group"
+                      className="inline-flex items-center text-primary font-semibold hover:text-primary/80 transition-colors group font-arabic"
                     >
-                      Read More 
+                      اقرأ المزيد 
                       <FiChevronRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </Link>
                   </div>
@@ -641,49 +784,46 @@ export default function HomePage() {
           ))}
           
           {/* Side Articles - Takes 4 columns */}
-          <div className="lg:col-span-4 space-y-6">
-            <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-6 rounded-xl">
-              <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+          <div className="lg:col-span-4 space-y-4">
+            <div className="bg-gradient-to-r from-gray-50 to-blue-50 p-4 rounded-xl">
+              <h4 className="text-base font-bold text-gray-900 mb-3 flex items-center font-heading">
                 <span className="w-2 h-2 bg-primary rounded-full mr-3"></span>
-                Trending Stories
+                <span className="font-arabic">القصص الشائعة</span>
               </h4>
               
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {politicsArticles.slice(1, 4).map((article, index) => (
                   <article key={article.id} className="group">
                     <div className="flex space-x-4">
-                      {/* Article Number */}
                       <div className="flex-shrink-0">
                         <div className="w-8 h-8 bg-primary text-white rounded-lg flex items-center justify-center font-bold text-sm">
                           {index + 2}
                         </div>
                       </div>
                       
-                      {/* Article Content */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center space-x-2 mb-2">
                           <CategoryBadge category={article.category} size="sm" />
                           <span className="text-gray-400 text-xs">•</span>
-                          <span className="text-gray-500 text-xs">{article.timeAgo}</span>
+                          <span className="text-gray-500 text-xs font-arabic">{article.timeAgo}</span>
                         </div>
                         
                         <Link href={`/article/${article.slug}`}>
-                          <h5 className="font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors mb-2">
+                          <h5 className="font-bold text-gray-900 line-clamp-2 group-hover:text-primary transition-colors mb-2 font-heading">
                             {article.title}
                           </h5>
                         </Link>
                         
-                        <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+                        <p className="text-gray-600 text-sm line-clamp-2 mb-3 font-arabic">
                           {article.excerpt}
                         </p>
                         
                         <div className="flex items-center justify-between text-xs text-gray-500">
-                          <span>👁️ {article.views || 0} views</span>
-                          <span>⏱️ {article.readTime}m read</span>
+                          <span>👁️ {getRandomInt(50000, 250000).toLocaleString()} views</span>
+                          <span className="font-arabic">⏱️ {article.readTime}م قراءة</span>
                         </div>
                       </div>
                       
-                      {/* Thumbnail */}
                       <div className="flex-shrink-0">
                         <Link href={`/article/${article.slug}`} className="block relative w-20 h-20 rounded-lg overflow-hidden">
                           <Image
@@ -699,52 +839,10 @@ export default function HomePage() {
                       </div>
                     </div>
                     
-                    {/* Divider (except for last item) */}
                     {index < 2 && (
                       <hr className="my-4 border-gray-200" />
                     )}
                   </article>
-                ))}
-              </div>
-              
-              {/* View All Button */}
-              <div className="mt-6 pt-4 border-t border-gray-200">
-                <Link 
-                  href="/articles?section=must-read"
-                  className="inline-flex items-center justify-center w-full py-3 px-4 bg-white text-primary font-semibold rounded-lg border border-primary hover:bg-primary hover:text-white transition-all duration-300 group"
-                >
-                  View All Must Read Articles
-                  <FiChevronRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
-            </div>
-            
-            {/* Popular This Week Widget */}
-            <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl">
-              <h4 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                <span className="text-xl mr-2">🔥</span>
-                Popular This Week
-              </h4>
-              
-              <div className="space-y-3">
-                {latestArticles.slice(4, 7).map((article, index) => (
-                  <div key={article.id} className="flex items-center space-x-3 group">
-                    <div className="w-6 h-6 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-full flex items-center justify-center text-xs font-bold">
-                      {index + 1}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <Link href={`/article/${article.slug}`}>
-                        <h6 className="font-semibold text-gray-900 line-clamp-2 group-hover:text-purple-600 transition-colors text-sm">
-                          {article.title}
-                        </h6>
-                      </Link>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <span className="text-xs text-gray-500">👁️ {article.views || 0}</span>
-                        <span className="text-xs text-gray-400">•</span>
-                        <span className="text-xs text-gray-500">{article.timeAgo}</span>
-                      </div>
-                    </div>
-                  </div>
                 ))}
               </div>
             </div>
@@ -759,57 +857,10 @@ export default function HomePage() {
           viewAllLink="/category/business"
         />
         
-        <div className="space-y-6">
-          {/* Main featured article */}
-          {businessArticles.slice(0, 1).map((article) => (
-            <div key={article.id} className="bg-gradient-to-r from-yellow-100 to-orange-100 rounded-lg overflow-hidden shadow-md">
-              <div className="grid md:grid-cols-2 gap-6 p-6">
-                <div className="order-2 md:order-1">
-                  <div className="flex items-center space-x-2 mb-3">
-                    <CategoryBadge category={article.category} />
-                    <span className="text-gray-500 text-xs">• {article.timeAgo}</span>
-                  </div>
-                  <Link href={`/article/${article.slug}`}>
-                    <h3 className="text-2xl font-bold mb-4 hover:text-primary transition-colors">
-                      {article.title}
-                    </h3>
-                  </Link>
-                  <p className="text-gray-700 mb-4 line-clamp-3">{article.excerpt}</p>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">
-                        {getSafeAuthorInfo(article.author).initials}
-                      </div>
-                      <span className="text-sm text-gray-700">{getSafeAuthorInfo(article.author).name}</span>
-                    </div>
-                    <div className="text-xs text-gray-500">
-                      <span>{article.readTime} min read</span>
-                    </div>
-                  </div>
-                </div>
-                <div className="order-1 md:order-2 relative aspect-video">
-                  <Link href={`/article/${article.slug}`} className="block h-full">
-                    <Image
-                      {...getSafeImageProps(
-                        article.image?.url || '',
-                        article.image?.alt || article.title,
-                        article.category?.name
-                      )}
-                      fill
-                      className="object-cover rounded-lg"
-                    />
-                  </Link>
-                </div>
-              </div>
-            </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {businessArticles.map((article) => (
+            <ArticleCard key={article.id} article={article} />
           ))}
-          
-          {/* Secondary articles grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {businessArticles.slice(1, 5).map((article) => (
-              <ArticleCard key={article.id} article={article} />
-            ))}
-          </div>
         </div>
       </section>
 
@@ -823,47 +874,8 @@ export default function HomePage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {sportsArticles.map((article) => (
-            <div key={article.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-              <Link href={`/article/${article.slug}`} className="block relative aspect-video">
-                <Image
-                  {...getSafeImageProps(
-                    article.image?.url || '',
-                    article.image?.alt || article.title,
-                    'business'
-                  )}
-                  fill
-                  className="object-cover"
-                />
-                <div className="absolute top-4 left-4">
-                  <span className="bg-green-600 text-white px-2 py-1 rounded text-xs font-semibold">
-                    💼 Business
-                  </span>
-                </div>
-              </Link>
-              <div className="p-6">
-                <div className="flex items-center space-x-2 mb-3">
-                  <span className="text-gray-500 text-xs">{article.timeAgo}</span>
-                </div>
-                <Link href={`/article/${article.slug}`}>
-                  <h3 className="text-lg font-bold mb-2 hover:text-primary transition-colors line-clamp-2">
-                    {article.title}
-                  </h3>
-                </Link>
-                <p className="text-gray-600 text-sm mb-4 line-clamp-2">{article.excerpt}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-6 h-6 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">
-                      {getSafeAuthorInfo(article.author).initials}
-                    </div>
-                    <span className="text-sm text-gray-700">{getSafeAuthorInfo(article.author).name}</span>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    <span>{article.readTime} min read</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+              <ArticleCard key={article.id} article={article} />
+            ))}
           </div>
         </section>
       )}
@@ -878,47 +890,8 @@ export default function HomePage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {entertainmentArticles.map((article) => (
-            <div key={article.id} className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow">
-              <Link href={`/article/${article.slug}`} className="block relative aspect-video">
-                                  <Image
-                    {...getSafeImageProps(
-                      article.image?.url || '',
-                      article.image?.alt || article.title,
-                      'entertainment'
-                    )}
-                    fill
-                    className="object-cover"
-                  />
-                  <div className="absolute top-4 left-4">
-                    <span className="bg-purple-600 text-white px-2 py-1 rounded text-xs font-semibold">
-                      🎭 Entertainment
-                    </span>
-                  </div>
-              </Link>
-              <div className="p-4">
-                <div className="flex items-center space-x-2 mb-2">
-                  <span className="text-gray-500 text-xs">{article.timeAgo}</span>
-                </div>
-                <Link href={`/article/${article.slug}`}>
-                  <h3 className="font-bold mb-2 line-clamp-2 hover:text-primary transition-colors">
-                    {article.title}
-                  </h3>
-                </Link>
-                <p className="text-gray-600 text-sm mb-3 line-clamp-2">{article.excerpt}</p>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <div className="w-5 h-5 bg-primary rounded-full flex items-center justify-center text-white text-xs font-bold mr-2">
-                      {getSafeAuthorInfo(article.author).initials}
-                    </div>
-                    <span className="text-xs text-gray-700">{getSafeAuthorInfo(article.author).name}</span>
-                  </div>
-                  <div className="text-xs text-gray-500">
-                    <span>{article.readTime}m</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+              <ArticleCard key={article.id} article={article} />
+            ))}
           </div>
         </section>
       )}
@@ -926,20 +899,20 @@ export default function HomePage() {
       {/* Newsletter Subscription */}
       <section className="bg-gradient-to-r from-primary to-secondary py-12 mb-16">
         <div className="container text-center">
-          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-            Stay Updated with Latest News
+          <h2 className="text-2xl md:text-3xl font-bold text-white mb-4 font-heading">
+            اشترك في النشرة الإخبارية
           </h2>
-          <p className="text-blue-100 mb-6 max-w-2xl mx-auto">
-            Get the latest news delivered straight to your inbox. No spam, unsubscribe at any time.
+          <p className="text-blue-100 mb-6 max-w-2xl mx-auto font-arabic">
+            احصل على آخر الأخبار مباشرة في بريدك الإلكتروني
           </p>
           <div className="max-w-md mx-auto flex gap-2">
             <input
               type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-2 rounded-lg border-0 focus:ring-2 focus:ring-white/50"
+              placeholder="البريد الإلكتروني"
+              className="flex-1 px-4 py-2 rounded-lg border-0 focus:ring-2 focus:ring-white/50 font-arabic"
             />
-            <button className="bg-white text-primary px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors">
-              Subscribe
+            <button className="bg-white text-primary px-6 py-2 rounded-lg font-semibold hover:bg-gray-100 transition-colors font-arabic">
+              اشتراك
             </button>
           </div>
         </div>
@@ -949,22 +922,20 @@ export default function HomePage() {
       <section className="container mb-16">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
           <div>
-            <div className="text-3xl font-bold text-primary mb-2">{(worldArticles.length + politicsArticles.length + businessArticles.length + sportsArticles.length + entertainmentArticles.length)}+</div>
-            <div className="text-gray-600">Articles Published</div>
+            <div className="text-3xl font-bold text-primary mb-2">150K+</div>
+            <div className="text-gray-600 font-arabic">مقال منشور</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-primary mb-2">{categories.length}</div>
-            <div className="text-gray-600">Categories</div>
+            <div className="text-gray-600 font-arabic">تصنيف</div>
           </div>
           <div>
-            <div className="text-3xl font-bold text-primary mb-2">
-              {latestArticles.reduce((sum, article) => sum + article.views, 0)}
-            </div>
-            <div className="text-gray-600">Total Views</div>
+            <div className="text-3xl font-bold text-primary mb-2">2.8M+</div>
+            <div className="text-gray-600 font-arabic">إجمالي المشاهدات</div>
           </div>
           <div>
             <div className="text-3xl font-bold text-primary mb-2">24/7</div>
-            <div className="text-gray-600">News Coverage</div>
+            <div className="text-gray-600 font-arabic">تغطية إخبارية</div>
           </div>
         </div>
       </section>
@@ -976,13 +947,24 @@ export default function HomePage() {
 function getCategoryIcon(iconName: string) {
   const icons: Record<string, string> = {
     laptop: '💻',
+    technology: '💻', 
     trophy: '🏆',
+    sports: '🏆',
     building: '🏛️',
+    politics: '🏛️',
     briefcase: '💼',
+    business: '💼',
     film: '🎬',
+    entertainment: '🎬',
     heart: '❤️',
+    health: '🏥',
+    world: '🌍',
+    science: '🔬',
+    lifestyle: '🌟',
+    food: '🍽️',
+    travel: '✈️',
     default: '📰',
   };
   
-  return icons[iconName] || icons.default;
+  return icons[iconName.toLowerCase()] || icons.default;
 } 
